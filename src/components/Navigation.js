@@ -6,7 +6,9 @@ import { decorator as reduxBurgerMenu } from 'redux-burger-menu/immutable';
 import { slide as Menu } from 'react-burger-menu';
 import { action as toggleMenu } from 'redux-burger-menu/immutable';
 import BuildNavRoutes from './BuildNavRoutes';
-//import { formatCurrentPath } from '../../utils/formats';
+// imports for tests
+import store from '../store';
+import shallow from 'enzyme';
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -49,6 +51,7 @@ class Navigation extends React.Component {
         </div>
         {this.state.routes.map(route => (
           <BuildNavRoutes
+            key={route.URL + route.name}
             routeObj={route}
             closeMenu={e => this.handleClick(e, route.name)}
           />
@@ -62,12 +65,21 @@ Navigation.propTypes = {
   toggleMenu: PropTypes.func.isRequired
 }
 
-var styles = {
+
+const mapActionsToProps = (dispatch) =>
+  bindActionCreators({
+    toggleMenu
+  }, dispatch);
+
+export default connect(null, mapActionsToProps)(Navigation);
+
+//styles
+const styles = {
   bmBurgerButton: {
     position: 'fixed',
     width: '36px',
     height: '30px',
-    left: '36px',
+    right: '36px',
     top: '36px'
   },
   bmBurgerBars: {
@@ -108,67 +120,30 @@ var styles = {
   }
 }
 
-//const styles = {
-///* General sidebar styles */
-//  burgerMenu: {
-//    background: '#FA6FD0',
-//    padding: '2.5em 1.5em 0',
-//    fontSize: '1.15em'
-//  },
-//
-//  /* Position and sizing of burger button */
-//  burgerButton: {
-//    position: "fixed",
-//    height: "30px",
-//    width: "36px",
-//    right: "36px",
-//    top: "36px"
-//  },
-//
-//  /* Color/shape of burger icon bars */
-//  burgerBars: {
-//    background: "#373a47"
-//  },
-//
-//  /* Position and sizing of clickable cross button */
-//  crossButton: {
-//    height: "24px",
-//    width: "24px"
-//  },
-//
-//  /* Color/shape of close button cross */
-//  cross: {
-//    background: "#bdc3c7"
-//  },
-//
-//  menuHeader: {
-    //
-//  },
-//
-//  itemList: {
-//    fontSize: "1.75em"
-//  },
-//
-//  ,
-//
-//  divider: {
-//    background: "#333",
-//    height: "1px",
-//    border: "0"
-//  }
-//}
+//tests
 
-//const mapStateToProps = ({ router }) => {
-//  const currentPath = router.location ? router.location.pathname : 'home';
-//
-//  return {
-//    selected: formatCurrentPath(currentPath)
-//  }
-//}
-
-const mapActionsToProps = (dispatch) =>
-  bindActionCreators({
-    toggleMenu
-  }, dispatch);
-
-export default connect(null, mapActionsToProps)(Navigation);
+//describe('::NAVIGATION::', () => {
+//  let wrapper;
+//  let testStore;
+//  beforeEach(() => {
+//    testStore = store();
+//    wrapper = shallow(<Navigation store={store}/>);
+//  });
+//  
+//  describe('it should be connected to store', () => {
+//    it('should be closed initially', () => {
+//      const initialBM = testStore.getState().burgerMenu.get('isOpen');
+//      expect(initialBM).toMatchSnapshot();
+//    });
+//  });
+//  
+//  it('should display landing route from props.selected', () => {
+//    expect(wrapper.prop('selected')).toEqual('home');
+//  });
+//  describe('BuildNavRoutes', () => {
+//    it('renders children', () => {
+//      expect(wrapper.dive().children().last().props())
+//        .toMatchSnapshot();
+//    });
+//  });
+//});
