@@ -96,6 +96,7 @@ const styles = {
     background: '#9FE4CC',
     padding: '2.5em 1.5em 0',
     fontSize: '1.15em',
+    overflow: 'no-scroll'
   },
   bmMorphShape: {
     fill: '#373a47'
