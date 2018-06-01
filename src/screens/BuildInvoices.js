@@ -1,6 +1,7 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import GoogleAuthButton from '../components/GoogleAuthButton';
+
 
 class BuildInvoices extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class BuildInvoices extends React.Component {
   
   render() {
     return this.props.isAuthed === false
-      ? <GoogleAuthButton login={this.handleLogin} /> 
+      ? <Redirect to="/google-login" />
       :(
       <div>
         Build invoices under construction

@@ -1,11 +1,11 @@
 // @flow
-
+//, { logout, saveUser } from 'helpers/auth'
 // set up permissions for authedUser
 // set up api file for google contacts login/auth
 // user should have email address on userObject
-// import auth, { logout, saveUser } from 'helpers/auth'
 // import { formatUserInfo } from 'helpers/utils'
-// import { fetchUser } from 'helpers/api'
+ import auth from '../helpers/auth';
+ import { fetchUser } from '../helpers/api';
 
 export const AUTH_USER = 'AUTH_USER';
 export const UNAUTH_USER = 'UNAUTH_USER';
@@ -52,15 +52,16 @@ export const removeFetchingUser = () => ({ type: REMOVE_FETCHING_USER });
 //export function fetchAndHandleUser (uid) {
 //  return function (dispatch) {
 //    dispatch(fetchingUser())
-//    return fetchUser(uid)
+//    return fetchUser()//uid
 //      .then((user) => dispatch(fetchingUserSuccess(uid, user, Date.now())))
 //      .catch((error) => dispatch(fetchingUserFailure(error)))
 //  }
 //}
 //
-//export const fetchAndHandleAuthedUser = () => {
-//  return function (dispatch) {
-//    dispatch(fetchingUser())
+export const fetchAndHandleAuthedUser = () => {
+  return function (dispatch) {
+    dispatch(fetchingUser());
+    return auth();
 //    return auth().then(({user, credentials}) => {
 //      const userData = user.providerData[0]
 //      const userInfo = formatUserInfo(userData.displayName, userData.photoURL, user.uid)
@@ -69,8 +70,8 @@ export const removeFetchingUser = () => ({ type: REMOVE_FETCHING_USER });
 //      .then(({user}) => saveUser(user))
 //      .then((user) => dispatch(authUser(user.uid)))
 //      .catch((error) => dispatch(fetchingUserFailure(error)))
-//  }
-//}
+  }
+}
 //
 //export const logoutAndUnauthed = () => {
 //  return function (dispatch) {
