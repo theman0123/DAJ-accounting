@@ -46,7 +46,7 @@ function manageUser(state: manageUserType = initialUserState, action: actionType
 }
 
 const initialState: userStateType = fromJS({
-  isFetching: true,
+  isFetching: false,
   error: '',
   isAuthed: false,
   authedId: '',
