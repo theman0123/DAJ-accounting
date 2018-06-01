@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 class BuildNavRoutes extends React.Component {
   constructor() {
     super();
-    
+    //state controls styling <obj> and hover <bool>
     this.state = {
       hover: false,
       font: {

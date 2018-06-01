@@ -6,14 +6,11 @@ import { decorator as reduxBurgerMenu } from 'redux-burger-menu/immutable';
 import { slide as Menu } from 'react-burger-menu';
 import { action as toggleMenu } from 'redux-burger-menu/immutable';
 import BuildNavRoutes from './BuildNavRoutes';
-// imports for tests
-import store from '../store';
-import shallow from 'enzyme';
 
 class Navigation extends React.Component {
   constructor(props) {
     super(props);
-    
+    //state displays routes and BuildNavRoutes applies styles and links
     this.state = {
       routes: [
         {

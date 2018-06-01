@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BuildNavRoutes render 1`] = `
+<div>
+  <div
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    style={
+      Object {
+        "color": "white",
+        "fontSize": "1.75em",
+        "opacity": ".8",
+      }
+    }
+  >
+    <a
+      href="/test"
+      onClick={[Function]}
+    >
+      test
+    </a>
+  </div>
+  ,
+</div>
+`;

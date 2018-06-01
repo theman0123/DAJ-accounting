@@ -1,6 +1,5 @@
 // @flow
 import { fromJS } from 'immutable';
-import type { IndexedCollection, KeyedCollection, IndexedSeq } from 'immutable';
 import { AUTH_USER, UNAUTH_USER, FETCHING_USER, FETCHING_USER_FAILURE, FETCHING_USER_SUCCESS, REMOVE_FETCHING_USER } from '../actions/user';
 import type { userType } from '../actions/user';
 
