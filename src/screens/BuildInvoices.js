@@ -13,20 +13,14 @@ class BuildInvoices extends React.Component {
     }
   }
   
-  handleLogin = () => {
-    console.log('logging in')
-  }
-  
-  testFunc = (e) => {
-    e.preventDefault();
-    console.log('test')
-  }
-  
   render() {
+    const {authedId} = this.props;
+    
     return this.props.isAuthed === false
       ? <Redirect to="/google-login" />
       :(
       <div>
+        <img src={this.props.avatar} />
         Build invoices under construction
       </div>
     )
@@ -34,7 +28,14 @@ class BuildInvoices extends React.Component {
 }
 
 const mapStateToProps = ({user}) => {
-  return {isAuthed: user.get('isAuthed')}
+  const uid = user.get('authedId')
+  const info = user.getIn([uid, 'info']) 
+  
+  return {
+    isAuthed: user.get('isAuthed'),
+    authedId: user.get('authedId'),
+    avatar: info ? info.imageUrl : null
+  }
 }
 
 export default connect(mapStateToProps)(BuildInvoices);

@@ -1,33 +1,43 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import GoogleAuthButton from '../components/GoogleAuthButton';
+import { GoogleLogin as GoogleAuth } from 'react-google-login';
 import * as userActionCreators from '../actions/user'
 
 class GoogleLogin extends React.Component {
-//  constructor() {
-//    super();
-//  }
-  
-  componentDidMount() {
-    //automatically login returning users redirect to route path
+  constructor(props) {
+    super(props);
+    
+    this.state = { redirect: false }
   }
   
-  handleLogin = () => {
-    console.log('logging in', this.props, this.props.fetchAndHandleAuthedUser())
-    //bring in user actions and state
-    //DONE
-    //run fanout function
-    //toggle fetch user
-    //fetch user from google auth
-    //place info on state
-    //toggle fetch user false
-    //redirect to relevant route
+  success = response => {
+    console.log('logging in', response, this.props); this.props.fetchAndHandleAuthedUser(response.profileObj);
+    return this.setState({redirect: true});
+  }
+  
+  failure = response => {
+    return this.props.fetchingUserFailure(response.error)
   }
   render() {
     console.log('props', this.props)
-    return (
-      <GoogleAuthButton login={this.handleLogin} />
+    return this.state.redirect === true
+      ? <Redirect to='/build-invoices' />
+      : (
+      <div style={styles.container}>
+        <div style={styles.font}> {'Login with'} </div>
+
+        <GoogleAuth
+          clientId="86405562588-vhqjatlr6n8da68oe7a0fbnnnrtjdosn.apps.googleusercontent.com"
+          buttonText="Google"
+          onRequest={() => this.props.fetchingUser()}
+          onSuccess={this.success}
+          onFailure={this.failure}
+          redirectUri="http://localhost:3000/build-invoices"
+          style={styles.btn}
+        />
+      </div>
     )
   }  
 }
@@ -52,3 +62,24 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoogleLogin);
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: '2em'
+  },
+  btn: {
+    padding: '1em',
+    background: '#8EE0C4',
+    borderColor: 'black',
+    fontSize: '1.5em',
+    boxShadow: '.25em .25em'
+  },
+  font: {
+    fontSize: '1.25em',
+    margin: '2em'
+  }
+}

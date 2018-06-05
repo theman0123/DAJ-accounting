@@ -14,6 +14,7 @@ class App extends Component {
     );
   }
 }
+export default App;
 
 const styles = {
   container: {
@@ -21,8 +22,9 @@ const styles = {
     gridTemplateRows: '[header] 5em [body-start] 1fr [body-end]'
   },
   logo: {
-    fontFamily: 'cursive',
-    marginLeft: '3em'
+    fontWeight: 'bold',
+    marginLeft: '3em',
+    position: 'absolute'
   },
   mainHeader: {
     gridRow: 'header'
@@ -32,4 +34,3 @@ const styles = {
   }
 }
 
-export default App;

@@ -1,5 +1,5 @@
 import React from 'react';
-//clientId: '86405562588-7577svk4u093j5milu9r57csrr23rbn5.apps.googleusercontent.com' 
+ 
 class GoogleAuthButton extends React.Component {
   render() {
     console.log(this.props)

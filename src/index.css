@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Lora');
+
 body {
   margin: 0;
   padding: 0;
-  font-family: serif
+  font-family: 'Lora', serif;
 }
 
 a {

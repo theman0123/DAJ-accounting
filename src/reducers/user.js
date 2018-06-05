@@ -82,6 +82,8 @@ export default function user(state: userStateType = initialState, action: action
         : state
           .set('error', '')
           .set('isFetching', false)
+          .set('isAuthed', true)
+          .set('authedId', action.uid)
           .set(action.uid, manageUser(state[action.uid], action));
     case REMOVE_FETCHING_USER:
       return state.merge({

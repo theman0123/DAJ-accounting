@@ -1,11 +1,5 @@
-// @flow
-//, { logout, saveUser } from 'helpers/auth'
-// set up permissions for authedUser
-// set up api file for google contacts login/auth
-// user should have email address on userObject
-// import { formatUserInfo } from 'helpers/utils'
- import auth from '../helpers/auth';
- import { fetchUser } from '../helpers/api';
+import auth from '../helpers/auth';
+import { fetchUser } from '../helpers/api';
 
 export const AUTH_USER = 'AUTH_USER';
 export const UNAUTH_USER = 'UNAUTH_USER';
@@ -20,7 +14,7 @@ export type userType = {
   avatar: string
 };
 
-export const authUser = (uid: string) => ({
+export const authUser = (uid) => ({
   type: AUTH_USER,
   uid,
 });
@@ -31,7 +25,7 @@ export const unauthUser = () => ({
 
 export const fetchingUser = () => ({ type: FETCHING_USER });
 
-export const fetchingUserFailure = (error: string) => {
+export const fetchingUserFailure = (error) => {
   console.warn(error);
   return {
     type: FETCHING_USER_FAILURE,
@@ -39,15 +33,37 @@ export const fetchingUserFailure = (error: string) => {
   };
 };
 
-export const fetchingUserSuccess = (uid: string,
-                                    user: userType) => ({
-  type: FETCHING_USER_SUCCESS,
-  uid,
-  user,
-  timestamp: Date.now(),
+export const fetchingUserSuccess =
+  (uid, user) =>
+({
+    type: FETCHING_USER_SUCCESS,
+    uid,
+    user,
+    timestamp: Date.now(),
 });
 
 export const removeFetchingUser = () => ({ type: REMOVE_FETCHING_USER });
+
+export const fetchAndHandleAuthedUser = (responseObj) => {
+  return function (dispatch) {
+    const uid = responseObj.googleId;
+    const user = responseObj
+    dispatch(fetchingUserSuccess(uid, user))
+  }
+}
+//, { logout, saveUser } from 'helpers/auth'
+// set up permissions for authedUser
+// set up api file for google contacts login/auth
+// user should have email address on userObject
+// import { formatUserInfo } from 'helpers/utils'
+//
+//export const logoutAndUnauthed = () => {
+//  return function (dispatch) {
+//    logout()
+//    dispatch(unauthUser())
+//  }
+//}
+
 
 //export function fetchAndHandleUser (uid) {
 //  return function (dispatch) {
@@ -58,10 +74,7 @@ export const removeFetchingUser = () => ({ type: REMOVE_FETCHING_USER });
 //  }
 //}
 //
-export const fetchAndHandleAuthedUser = () => {
-  return function (dispatch) {
-    dispatch(fetchingUser());
-    return auth();
+    
 //    return auth().then(({user, credentials}) => {
 //      const userData = user.providerData[0]
 //      const userInfo = formatUserInfo(userData.displayName, userData.photoURL, user.uid)
@@ -70,13 +83,3 @@ export const fetchAndHandleAuthedUser = () => {
 //      .then(({user}) => saveUser(user))
 //      .then((user) => dispatch(authUser(user.uid)))
 //      .catch((error) => dispatch(fetchingUserFailure(error)))
-  }
-}
-//
-//export const logoutAndUnauthed = () => {
-//  return function (dispatch) {
-//    logout()
-//    dispatch(unauthUser())
-//  }
-//}
-
