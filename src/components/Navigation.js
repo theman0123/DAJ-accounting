@@ -6,11 +6,12 @@ import { decorator as reduxBurgerMenu } from 'redux-burger-menu/immutable';
 import { slide as Menu } from 'react-burger-menu';
 import { action as toggleMenu } from 'redux-burger-menu/immutable';
 import BuildNavRoutes from './BuildNavRoutes';
+import Avatar from './Avatar';
 
 class Navigation extends React.Component {
   constructor(props) {
     super(props);
-    //state displays routes and BuildNavRoutes applies styles and links
+    
     this.state = {
       routes: [
         {
@@ -37,41 +38,85 @@ class Navigation extends React.Component {
     const selected = this.state.selected;
 
     return (
-      <BurgerMenu
-        styles={ styles }
-        right>
-        <div style={styles.menuHeader}>
-          {'Select an App'}
-          <div style={styles.selected}>
-            {selected}
-          </div>
+      <div style={styles.container}>
+        <div style={styles.mainHeader}>
+          <h1 style={styles.logo}> {'insert logo'} </h1>
+          <Avatar image={this.props.avatar} />
         </div>
-        {this.state.routes.map(route => (
-          <BuildNavRoutes
-            key={route.URL + route.name}
-            routeObj={route}
-            closeMenu={e => this.handleClick(e, route.name)}
-          />
-        ))}
-      </BurgerMenu>
+        
+        <div style={styles.menuWrapper}>
+          <BurgerMenu
+            styles={ styles }
+            right>
+            <div style={styles.menuHeader}>
+              {'Select an App'}
+              <div style={styles.selected}>
+                {selected}
+              </div>
+            </div>
+            
+            {this.state.routes.map(route => (
+              <BuildNavRoutes
+                key={route.URL + route.name}
+                routeObj={route}
+                closeMenu={e => this.handleClick(e, route.name)}
+              />
+            ))}
+          </BurgerMenu>
+        </div>
+      </div>
     );
   }
 }
+
 
 Navigation.propTypes = {
   toggleMenu: PropTypes.func.isRequired
 }
 
+const mapStateToProps = ({user}) => {
+  const uid = user.get('authedId')
+  const info = user.getIn([uid, 'info']) 
+  
+  return {
+    isAuthed: user.get('isAuthed'),
+    authedId: user.get('authedId'),
+    avatar: info ? info.imageUrl : null
+  }
+}
 
 const mapActionsToProps = (dispatch) =>
   bindActionCreators({
     toggleMenu
   }, dispatch);
 
-export default connect(null, mapActionsToProps)(Navigation);
+export default connect(mapStateToProps, mapActionsToProps)(Navigation);
 
 //styles
 const styles = {
+  container: {
+    display: 'grid',
+    gridGap: '.25em',
+    gridTemplateRows: '[header] 7em'
+  },
+  menuWrapper: {
+    position: 'absolute',
+  },
+  mainHeader: {
+    gridRow: 'header',
+    display: 'grid',
+    gridGap: '.25em',
+    gridTemplateColumns: '[logo] 1fr 1fr 1fr 1fr [avatar] 1fr 1fr [icon]',
+    gridTemplateRows: '7em'
+  },
+  logo: {
+    fontWeight: 'bold',
+    marginLeft: '1em',
+    gridColumn: 'logo'
+  },
+  avatar: {
+    gridColumn: 'avatar'
+  },
   bmBurgerButton: {
     position: 'fixed',
     width: '36px',
@@ -84,7 +129,8 @@ const styles = {
   },
   bmCrossButton: {
     height: '24px',
-    width: '24px'
+    width: '24px',
+    background: 'white'
   },
   bmCross: {
     background: '#8EE0C4'

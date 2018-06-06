@@ -20,8 +20,8 @@ class BuildInvoices extends React.Component {
       ? <Redirect to="/google-login" />
       :(
       <div>
-        <img src={this.props.avatar} />
         Build invoices under construction
+        ....routes here.....
       </div>
     )
   }
@@ -29,12 +29,11 @@ class BuildInvoices extends React.Component {
 
 const mapStateToProps = ({user}) => {
   const uid = user.get('authedId')
-  const info = user.getIn([uid, 'info']) 
+  const info = user.getIn([uid, 'info'])//needed?
   
   return {
     isAuthed: user.get('isAuthed'),
-    authedId: user.get('authedId'),
-    avatar: info ? info.imageUrl : null
+    authedId: user.get('authedId')
   }
 }
 
