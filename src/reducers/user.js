@@ -60,10 +60,12 @@ export default function user(state: userStateType = initialState, action: action
         authedId: action.uid,
       });
     case UNAUTH_USER:
-      return state.merge({
-        isAuthed: false,
-        authedId: '',
-      });
+      return action.uid
+        ? state
+          .set('isAuthed', false)
+          .set('authedId', '')
+          .set(action.uid, manageUser(state[action.uid], {}))
+        : state
     case FETCHING_USER:
       return state.merge({
         isFetching: true,

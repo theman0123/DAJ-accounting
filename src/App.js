@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import Navigation from './components/Navigation.js';
 
 class App extends Component {

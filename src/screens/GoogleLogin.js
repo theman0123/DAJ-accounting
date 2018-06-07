@@ -12,8 +12,57 @@ class GoogleLogin extends React.Component {
     this.state = { redirect: false }
   }
   
+  componentDidMount() {
+    console.log(!this.props.authedId, navigator.credentials.get({password: true}))
+    if (window.PasswordCredential || window.FederatedCredential) {
+      if (!this.props.authedId) {
+        return navigator.credentials.get({
+          password: true,
+          federated: {
+            providers: [
+              'https://accounts.google.com'
+            ]
+          },
+          mediation: 'silent'
+        }).then(c => {
+          console.log('then')
+          if (c) {
+            switch (c.type) {
+              case 'password':
+                console.log('password', c)
+//                return sendRequest(c);
+                break;
+              case 'federated':
+                console.log('federated')
+//                return gSignIn(c);
+                break;
+            }
+          } else {
+            console.log('else', c)
+            return Promise.resolve();
+          }
+        }).then(profile => {
+          if (profile) {
+            console.log(profile)
+//            updateUI(profile);
+          }
+        }).catch(error => {
+        console.log('Sign-in Failed');
+        });
+        }
+        }
+  }
+  
   success = response => {
-    console.log('logging in', response, this.props); this.props.fetchAndHandleAuthedUser(response.profileObj);
+    console.log(response)
+    const cred = new FederatedCredential({
+      id: response.googleId,
+      provider: 'https://account.google.com',
+      name: 'google'
+    });
+    navigator.credentials.store(cred)
+    
+    this.props.fetchAndHandleAuthedUser(response.profileObj);
     return this.setState({redirect: true});
   }
   
@@ -21,7 +70,6 @@ class GoogleLogin extends React.Component {
     return this.props.fetchingUserFailure(response.error)
   }
   render() {
-    console.log('props', this.props)
     return this.state.redirect === true
       ? <Redirect to='/build-invoices' />
       : (

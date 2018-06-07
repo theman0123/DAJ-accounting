@@ -23,7 +23,7 @@ class Navigation extends React.Component {
           URL: '/build-invoices'
         }
       ],
-      selected: 'Home'
+      selected: '',
     }
   }
   
@@ -36,6 +36,10 @@ class Navigation extends React.Component {
   render() {
     const BurgerMenu = reduxBurgerMenu(Menu);
     const selected = this.state.selected;
+    const logoutObj = {
+      name: 'Logout', 
+      URL: '/logout'
+    }
 
     return (
       <div style={styles.container}>
@@ -54,14 +58,24 @@ class Navigation extends React.Component {
                 {selected}
               </div>
             </div>
-            
-            {this.state.routes.map(route => (
-              <BuildNavRoutes
-                key={route.URL + route.name}
-                routeObj={route}
-                closeMenu={e => this.handleClick(e, route.name)}
-              />
-            ))}
+            <div>
+              {this.state.routes.map(route => (
+                <BuildNavRoutes
+                  key={route.URL + route.name}
+                  routeObj={route}
+                  closeMenu={(e) => this.handleClick(e, route.name)}
+                />
+              ))}
+            </div>
+            <div style={styles.logout}>
+              {this.props.isAuthed === true
+                ? <BuildNavRoutes
+                    key={logoutObj.URL + logoutObj.name}
+                    routeObj={logoutObj}
+                    closeMenu={(e) => this.handleClick(e, logoutObj.name)} />
+                : null
+              }
+            </div>
           </BurgerMenu>
         </div>
       </div>
@@ -97,7 +111,9 @@ const styles = {
   container: {
     display: 'grid',
     gridGap: '.25em',
-    gridTemplateRows: '[header] 7em'
+    gridTemplateRows: '[header] 7em',
+    justifyItems: 'center',
+    alignItems: 'center'
   },
   menuWrapper: {
     position: 'absolute',
@@ -111,7 +127,6 @@ const styles = {
   },
   logo: {
     fontWeight: 'bold',
-    marginLeft: '1em',
     gridColumn: 'logo'
   },
   avatar: {
@@ -146,7 +161,9 @@ const styles = {
   },
   bmItemList: {
     color: '#b8b7ad',
-    padding: '0.8em'
+    padding: '0.8em',
+    display: 'flex',
+    flexDirection: 'column',
   },
   bmOverlay: {
     background: 'rgba(0, 0, 0, 0.3)'
@@ -161,6 +178,10 @@ const styles = {
     fontSize: ".7em",
     opacity: ".5",
     color: 'white'
+  },
+  logout: {
+    marginTop: 'auto', //places 'logout' on floor of menu
+    marginBottom: '1em' //make sure 'logout is stil visible
   }
 }
 

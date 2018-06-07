@@ -19,8 +19,9 @@ export const authUser = (uid) => ({
   uid,
 });
 
-export const unauthUser = () => ({
+export const unauthUser = (uid) => ({
   type: UNAUTH_USER,
+  uid,
 });
 
 export const fetchingUser = () => ({ type: FETCHING_USER });
@@ -49,6 +50,12 @@ export const fetchAndHandleAuthedUser = (responseObj) => {
     const uid = responseObj.googleId;
     const user = responseObj
     dispatch(fetchingUserSuccess(uid, user))
+  }
+}
+
+export const logout = (uid) => {
+  return function (dispatch) {
+    dispatch(unauthUser(uid))
   }
 }
 //, { logout, saveUser } from 'helpers/auth'
