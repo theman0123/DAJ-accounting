@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import SearchContacts from 'components/SearchContacts';
+import Card from 'components/Card';
 
 class BuildInvoices extends React.Component {
   constructor(props) {
@@ -27,17 +28,7 @@ class BuildInvoices extends React.Component {
       :(
       <div>
         <SearchContacts handleSearch={this.handleSearch}/>
-        <div style={styles.wrapper}>
-          <div style={styles.card}>
-            <div style={styles.header}>
-              <h3 style={styles.name}>{'spencer james'}</h3>
-
-            </div>
-            <div style={styles.body}>
-              <h4 style={styles.email}>{'email@knowsit.com'}</h4>
-            </div>
-          </div>
-        </div>
+        <Card />
       </div>
     )
   }
@@ -57,35 +48,5 @@ const mapStateToProps = ({user}) => {
 export default connect(mapStateToProps)(BuildInvoices);
 
 const styles = {
-  wrapper: {
-    display: 'flex',
-    background: '#BCF1AC',
-    width: '0.5em',
-    height: '5em',
-  },
-  selected: {
-  },
-  header: {
-    background: 'white',
-  },
-  body: {
-    height: '100%',
-    background: 'linear-gradient(to bottom right, #F6F7DC, #D9FBFA)',
-  },
-  card: {
-    height: '5em',
-    width: '10em',
-    borderStyle: 'solid',
-    borderRadius: '0.25em',
-    textAlign: 'center',
-    borderLeft: 'none',
-  },
-  name: {
-    margin: '0.25em',
-    padding: '0',
-  },
-  email: {
-    margin: '0.25em',
-    padding: '0',
-  },
+  
 }

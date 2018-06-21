@@ -109,11 +109,14 @@ export default connect(mapStateToProps, mapActionsToProps)(Navigation);
 //styles
 const styles = {
   container: {
+    marginBottom: '1.25em',
     display: 'grid',
     gridGap: '.25em',
     gridTemplateRows: '[header] 7em',
     justifyItems: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    background: '#EBEAC0',
+    boxShadow: '0em .5em #A4A486'
   },
   menuWrapper: {
     position: 'absolute',
