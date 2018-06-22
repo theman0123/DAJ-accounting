@@ -1,10 +1,15 @@
 import React from 'react'
 
 export default (props) => {
+  const {wrapper, header, card, selected, body, email, name} = styles
+  
+  const cardStyles = props.selected
+    ? selected
+    : card
+  
   return (
     <div style={styles.wrapper}>
-      <div style={styles.selected}></div>
-      <div style={styles.card}>
+      <div style={cardStyles}>
         <div style={styles.header}>
           <h3 style={styles.name}>{'spencer james'}</h3>
 
@@ -20,11 +25,15 @@ export default (props) => {
 const styles = {
   wrapper: {
     display: 'flex',
-    
   },
   selected: {
-//    background: 'green',
-//    width: '2em',
+    margin: '1em',
+    width: '14em',
+    borderStyle: 'solid',
+    borderRadius: '0.25em',
+    textAlign: 'center',
+    display: 'grid',
+    boxShadow: '0em 0.25em .75em .25em #BAD58C'
   },
   header: {
     background: 'white',
@@ -37,12 +46,11 @@ const styles = {
   card: {
     margin: '1em',
     width: '14em',
-    borderStyle: 'solid',
-    borderLeft: 'thick green',
+    border: 'solid black .1em',
     borderRadius: '0.25em',
     textAlign: 'center',
     display: 'grid',
-    boxShadow: '0.25em 0.25em #535354', //on select make this green
+    boxShadow: '0.25em 0.25em .5em .1em #A0A0A0',
   },
   name: {
     margin: '0.25em',

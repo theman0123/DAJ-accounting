@@ -93,7 +93,7 @@ const styles = {
     background: '#8EE0C4',
     borderColor: 'black',
     fontSize: '1.5em',
-    boxShadow: '.25em .25em'
+    boxShadow: '.25em .25em .5em .15em #A4A486'
   },
   font: {
     fontSize: '1.25em',

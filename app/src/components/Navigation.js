@@ -115,8 +115,8 @@ const styles = {
     gridTemplateRows: '[header] 7em',
     justifyItems: 'center',
     alignItems: 'center',
-    background: '#EBEAC0',
-    boxShadow: '0em .5em #A4A486'
+    background: '#9FE4CC',
+    boxShadow: '0em .25em .1em .1em #A4A486'
   },
   menuWrapper: {
     position: 'absolute',
@@ -133,7 +133,7 @@ const styles = {
     gridColumn: 'logo'
   },
   avatar: {
-    gridColumn: 'avatar'
+    gridColumn: 'avatar',
   },
   bmBurgerButton: {
     position: 'fixed',
