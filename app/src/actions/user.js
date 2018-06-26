@@ -58,35 +58,3 @@ export const logout = (uid) => {
     dispatch(unauthUser(uid))
   }
 }
-//, { logout, saveUser } from 'helpers/auth'
-// set up permissions for authedUser
-// set up api file for google contacts login/auth
-// user should have email address on userObject
-// import { formatUserInfo } from 'helpers/utils'
-//
-//export const logoutAndUnauthed = () => {
-//  return function (dispatch) {
-//    logout()
-//    dispatch(unauthUser())
-//  }
-//}
-
-
-//export function fetchAndHandleUser (uid) {
-//  return function (dispatch) {
-//    dispatch(fetchingUser())
-//    return fetchUser()//uid
-//      .then((user) => dispatch(fetchingUserSuccess(uid, user, Date.now())))
-//      .catch((error) => dispatch(fetchingUserFailure(error)))
-//  }
-//}
-//
-    
-//    return auth().then(({user, credentials}) => {
-//      const userData = user.providerData[0]
-//      const userInfo = formatUserInfo(userData.displayName, userData.photoURL, user.uid)
-//      return dispatch(fetchingUserSuccess(user.uid, userInfo, Date.now()))
-//    })
-//      .then(({user}) => saveUser(user))
-//      .then((user) => dispatch(authUser(user.uid)))
-//      .catch((error) => dispatch(fetchingUserFailure(error)))
