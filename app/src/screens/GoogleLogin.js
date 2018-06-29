@@ -25,7 +25,20 @@ class GoogleLogin extends React.Component {
       },
     })
       .then(res => res.json())
-      .then(people => this.props.fetchingContactsSuccess(people.connections))
+      .then(people => (console.log(people),
+                       // format for people.connections
+                       // people
+                       // ..connections
+                       // ....names
+                       // ......1
+                       // ........displayName: 'First Last'
+                       // ....emailAddresses
+                       // ......0
+                       // ........value: email@email.com
+                       // redux should be simple: contacts.list[
+                       // {displayName: '', emailAddresses: ''}]
+                       
+                       this.props.fetchingContactsSuccess(people.connections)))
       .catch(err => this.props.fetchingContactsFailure(err))
 
     this.setState({redirect: true})
