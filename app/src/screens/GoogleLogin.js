@@ -25,20 +25,22 @@ class GoogleLogin extends React.Component {
       },
     })
       .then(res => res.json())
-      .then(people => (console.log(people),
-                       // format for people.connections
-                       // people
-                       // ..connections
-                       // ....names
-                       // ......1
-                       // ........displayName: 'First Last'
-                       // ....emailAddresses
-                       // ......0
-                       // ........value: email@email.com
-                       // redux should be simple: contacts.list[
-                       // {displayName: '', emailAddresses: ''}]
-                       
-                       this.props.fetchingContactsSuccess(people.connections)))
+      .then(people => {
+        return people.connections.reduce((acc, current) => {
+          acc[current.resourceName] = {
+            resourceName: current.resourceName,
+            fullName: current.names[0].displayName,
+            emails: current.emailAddresses 
+              ? current.emailAddresses.map((address) => {
+                let emails = []
+                emails.push(address.value)
+                return emails
+              }) : null // Google looks up a person's info using phone numbers... can you do that?
+          }
+          return acc
+        }, {})
+      })
+      .then(formattedPeople => this.props.fetchingContactsSuccess(formattedPeople))
       .catch(err => this.props.fetchingContactsFailure(err))
 
     this.setState({redirect: true})

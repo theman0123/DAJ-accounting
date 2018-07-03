@@ -4,9 +4,9 @@ export const FETCHING_CONTACTS_FAILURE = 'FETCHING_CONTACTS_FAILURE';
 export const FETCHING_CONTACTS_SUCCESS = 'FETCHING_CONTACTS_SUCCESS';
 export const REMOVE_FETCHING_CONTACTS = 'REMOVE_FETCHING_CONTACTS';
 
-export const fetchingContacts = (): actionType => ({ type: FETCHING_CONTACTS });
+export const fetchingContacts = () => ({ type: FETCHING_CONTACTS });
 
-export const fetchingContactsFailure = (error: string): actionType => {
+export const fetchingContactsFailure = (error) => {
   console.warn(error);
   return {
     type: FETCHING_CONTACTS_FAILURE,
@@ -14,10 +14,10 @@ export const fetchingContactsFailure = (error: string): actionType => {
   };
 };
 
-export const fetchingContactsSuccess = (importedContacts: importedContactsType): actionType =>
+export const fetchingContactsSuccess = (importedContacts) =>
   ({
     type: FETCHING_CONTACTS_SUCCESS,
     importedContacts,
   });
 
-export const removeFetchingContacts = (): actionType => ({ type: REMOVE_FETCHING_CONTACTS });
+export const removeFetchingContacts = () => ({ type: REMOVE_FETCHING_CONTACTS });

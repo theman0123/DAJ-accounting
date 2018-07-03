@@ -1,25 +1,27 @@
 import React from 'react'
 
-export default (props) => {
-  const {wrapper, header, card, selected, body, email, name} = styles
+export default ({details, selected}) => {
+  const {wrapper, header, card, highlight, body, name, email} = styles
   
-  const cardStyles = props.selected
-    ? selected
+  const cardStyles = selected
+    ? highlight
     : card
-  
-  return (
+
+  return details
+    ? (
     <div style={styles.wrapper}>
       <div style={cardStyles}>
         <div style={styles.header}>
-          <h3 style={styles.name}>{'spencer james'}</h3>
+          <h3 style={styles.name}>{details.fullName}</h3>
 
         </div>
         <div style={styles.body}>
-          <h4 style={styles.email}>{'email@knowsit.com'}</h4>
+          <h4 style={styles.email}>{details.emails ? details.emails : 'no email'}</h4>
         </div>
       </div>
     </div>
-  )
+    )
+    : null
 }
 
 const styles = {
