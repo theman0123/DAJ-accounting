@@ -1,5 +1,11 @@
 import { fromJS } from 'immutable'
-import { FETCHING_CONTACTS, FETCHING_CONTACTS_FAILURE, FETCHING_CONTACTS_SUCCESS, REMOVE_FETCHING_CONTACTS } from '../actions/contacts'
+import { 
+  FETCHING_CONTACTS,
+  FETCHING_CONTACTS_FAILURE,
+  FETCHING_CONTACTS_SUCCESS,
+  REMOVE_FETCHING_CONTACTS,
+  SET_SELECTED
+} from '../actions/contacts'
 
 export const initialState = fromJS({
   isFetching: false,
@@ -29,6 +35,9 @@ export default function contacts (state = initialState, action) {
         isFetching: false,
         error: '',
       })
+    case SET_SELECTED:
+      // contacts.list[action.id]: *run another reducer*
+      return state.merge({selected: !selected})
     default:
       return state
   }

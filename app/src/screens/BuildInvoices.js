@@ -10,7 +10,7 @@ class BuildInvoices extends React.Component {
   constructor (props) {
     super(props)
 
-    this.state = {results: [], error: ''}
+    this.state = {results: [], error: '', selected: []}
   }
 
   handleSearch (value) {
@@ -38,6 +38,25 @@ class BuildInvoices extends React.Component {
     }
   }
   
+  handleCardClick (e, details) {
+    e.preventDefault()
+    const { emails, id, fullName } = details
+
+    if ( emails === null ) return this.setState({error: `no email for this card: ${fullName}`})
+
+    const getEmails = !emails ? emails.get(0)
+      : emails.map((email, index) => {
+        const value = email.get(0)
+
+        this.setState({error: ''})
+        // change store.contacts.selected: true
+        // pass on value to redux store.invoice.to: [value]
+      })
+    
+// this.props.handleEmailArray
+// this.props.handleEmailString
+  }
+  
   cardHandler (list) {
     return list.map(person => {
       let p = {
@@ -45,7 +64,7 @@ class BuildInvoices extends React.Component {
         fullName: person.get('fullName'),
         emails: person.get('emails')
       }
-        return <Card key={p.id} details={p} />
+        return <Card key={p.id} details={p} getEmails={this.handleCardClick.bind(this)} />
       })
   }
 
@@ -59,9 +78,10 @@ class BuildInvoices extends React.Component {
           <SearchContacts handleSearch={this.handleSearch.bind(this)}/>
           {error
             ? <Error error={error} />
-            : results.length > 0
-              ? this.cardHandler(this.state.results)
-              : null}
+            : null}
+          {results.length > 0
+            ? this.cardHandler(this.state.results)
+            : null}
         </div>
       )
   }

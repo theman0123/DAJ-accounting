@@ -30,6 +30,7 @@ class GoogleLogin extends React.Component {
           acc[current.resourceName] = {
             resourceName: current.resourceName,
             fullName: current.names[0].displayName,
+            seleted: false,
             emails: current.emailAddresses 
               ? current.emailAddresses.map((address) => {
                 let emails = []

@@ -1,16 +1,22 @@
 import React from 'react'
 
-export default ({details, selected}) => {
+export default ({details, selected, getEmails}) => {
   const {wrapper, header, card, highlight, body, name, email} = styles
   
-  const cardStyles = selected
+  const cardStyles = selected === true
     ? highlight
     : card
-
+  
   return details
     ? (
     <div style={styles.wrapper}>
-      <div style={cardStyles}>
+      <div
+        style={cardStyles}
+        onClick={(e) => {
+          selected = selected ? !selected : true
+          console.log(selected)
+          return getEmails(e, details)}
+        }>
         <div style={styles.header}>
           <h3 style={styles.name}>{details.fullName}</h3>
 
@@ -28,7 +34,7 @@ const styles = {
   wrapper: {
     display: 'flex',
   },
-  selected: {
+  highlight: {
     margin: '1em',
     width: '14em',
     borderStyle: 'solid',
