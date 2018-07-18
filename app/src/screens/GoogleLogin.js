@@ -30,7 +30,6 @@ class GoogleLogin extends React.Component {
           acc[current.resourceName] = {
             resourceName: current.resourceName,
             fullName: current.names[0].displayName,
-            seleted: false,
             emails: current.emailAddresses 
               ? current.emailAddresses.map((address) => {
                 let emails = []
@@ -73,7 +72,7 @@ class GoogleLogin extends React.Component {
   }
 }
 
-const mapStateToProps = (store) => {
+const mapStateToProps = ({ user }) => {
   const userState = [
     'isFetching',
     'error',
@@ -82,7 +81,7 @@ const mapStateToProps = (store) => {
   ]
 
   return userState.reduce((prevState, currentVal) => {
-    prevState[currentVal] = store.user.get(currentVal)
+    prevState[currentVal] = user.get(currentVal)
 
     return prevState
   }, {})
