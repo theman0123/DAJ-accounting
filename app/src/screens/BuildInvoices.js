@@ -7,7 +7,7 @@ import * as invoiceActionCreators from '../actions/invoice'
 import SearchContacts from 'components/SearchContacts'
 import Card from 'components/Card'
 import Error from '../components/Error'
-import ModalForm from '../components/ModalForm'
+import InvoiceModal from '../components/InvoiceModal'
 
 // note: state is keeping track of Card id's @selected and search @results
 // redux is keeping track of added emails (all for a given card) @invoice.recipients
@@ -83,7 +83,7 @@ class BuildInvoices extends React.Component {
         <div style={styles.mainContainer}>
           <div style={styles.topContainer}>
             <SearchContacts handleSearch={this.handleSearch}/>
-            <ModalForm />
+            <InvoiceModal />
           </div>
           {error
             ? <Error error={error} />
