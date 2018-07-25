@@ -2,21 +2,19 @@ import React from 'react'
 
 export default ({details, selected, getEmails}) => {
   const {wrapper, header, card, highlight, body, name, email} = styles
-  
-  const cardStyles = selected === true
+
+  const cardStyles = selected.find(id => id === details.id)
     ? highlight
     : card
-  
+
   return details
     ? (
     <div style={styles.wrapper}>
       <div
         style={cardStyles}
         onClick={(e) => {
-          selected = selected ? !selected : true
-          console.log(selected)
-          return getEmails(e, details)}
-        }>
+          getEmails(e, details)
+        }}>
         <div style={styles.header}>
           <h3 style={styles.name}>{details.fullName}</h3>
 

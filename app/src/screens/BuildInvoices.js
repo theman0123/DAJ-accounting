@@ -7,6 +7,10 @@ import * as invoiceActionCreators from '../actions/invoice'
 import SearchContacts from 'components/SearchContacts'
 import Card from 'components/Card'
 import Error from '../components/Error'
+import ModalForm from '../components/ModalForm'
+
+// note: state is keeping track of Card id's @selected and search @results
+// redux is keeping track of added emails (all for a given card) @invoice.recipients
 
 class BuildInvoices extends React.Component {
   constructor (props) {
@@ -15,7 +19,7 @@ class BuildInvoices extends React.Component {
     this.state = {results: [], error: '', selected: []}
   }
 
-  handleSearch (value) {
+  handleSearch = (value) => {
     //make cards searchable
     const results = []
     const { connections } = this.props
@@ -40,38 +44,52 @@ class BuildInvoices extends React.Component {
     }
   }
 
-  handleCardClick (e, details) {
+  handleCardClick = (e, {emails, fullName, id}) => {
     e.preventDefault()
-    const { emails, fullName } = details
+    const { selected } = this.state
 
     if (emails === null) return this.setState({error: `no email for this card: ${fullName}`})
 
     emails.map((email, index) => {
       const value = email.get(index)
       const recipients = this.props.recipients
-      const toRemove = recipients.find(address => {
-        return value === address
-      })
+
       // reset error for smooth error recovery
       if (this.state.error) this.setState({error: ''})
       // remove email/value if exists in list of recipients
-      if (toRemove) this.props.removeRecipient(index)
+      if (this.findIn(recipients, value)) {
+        this.props.removeRecipient(index)
+        this.setState({selected: selected.filter(cardId => cardId !== id)})
+      }
       // otherwise place value in redux store
-      else this.props.addRecipient(value)
+      else {
+        this.props.addRecipient(value),
+        this.setState({selected: selected.concat(id)})
+      }
     })
+  }
+  
+  findIn(list, value) {
+    return list.find(item => item === value )
   }
 
   render () {
-    const { error, results } = this.state
-
+    const { error, results, selected } = this.state
+    const contactsError = this.props.error
+    
     return this.props.isAuthed === false
       ? <Redirect to='/google-login' />
       : (
-        <div>
-          <SearchContacts handleSearch={this.handleSearch.bind(this)}/>
+        <div style={styles.mainContainer}>
+          <div style={styles.topContainer}>
+            <SearchContacts handleSearch={this.handleSearch}/>
+            <ModalForm />
+          </div>
           {error
             ? <Error error={error} />
-            : null}
+            : contactsError
+              ? <Error error={contactsError} />
+              : null }
           {results.length > 0
             ? results.map(person => {
               let p = {
@@ -79,7 +97,11 @@ class BuildInvoices extends React.Component {
                 fullName: person.get('fullName'),
                 emails: person.get('emails'),
               }
-              return <Card key={p.id} details={p} getEmails={this.handleCardClick.bind(this)} />
+              return <Card
+                       key={p.id}
+                       details={p}
+                       getEmails={this.handleCardClick}
+                       selected={selected}/>
             })
             : null}
         </div>
@@ -94,6 +116,7 @@ const mapStateToProps = ({user, contacts, invoice}) => {
     isAuthed: user.get('isAuthed'),
     connections: contacts.get('list'),
     recipients: recipients.size > 0 ? recipients : [],
+    error: contacts.get('error'),
   }
 }
 
@@ -110,7 +133,16 @@ BuildInvoices.propTypes = {
   addRecipient: PropTypes.func.isRequired,
   removeRecipient: PropTypes.func.isRequired,
 }
-
+// convert to grid -topContainer //
 const styles = {
-
+  topContainer: {
+    display: 'flex',
+    margin: '2em',
+  },
+  mainContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    
+  }
 }
