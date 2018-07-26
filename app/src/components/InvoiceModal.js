@@ -1,6 +1,7 @@
 import React from 'react'
 import Modal from 'react-modal'
 import AttachInvoices from '../components/Button'
+import InvoiceForm from '../components/InvoiceForm'
 
 Modal.setAppElement('#root')
 
@@ -36,10 +37,6 @@ export default class InvoiceModal extends React.Component {
     console.log('clicked', this.props)
     this.state.modalIsOpen ? this.closeModal() : this.openModal()
   }
-  
-  sendInvoice() {
-    console.log('invoice sent')
-  }
 
   toggleShowInput = (show) => {
     const { companyName } = this.props
@@ -47,24 +44,10 @@ export default class InvoiceModal extends React.Component {
     if (!show && !companyName) this.setState({showInput: true})
     return null
   }
-  
-  handleCompanyName () {
-    console.log('company Name')
-    
-  }
-  //tabindex="1"
 
   render() {
     const { companyName } = this.props
-    const { total, showInput } = this.state
-    const myInput = (
-      <p>
-        <input
-          onChange={this.handleCompanyName}
-          placeholder={companyName ? {companyName} : "Company Name"}
-          tabindex="1"/>
-      </p>
-    )
+
     return (
       <div>
         <Modal
@@ -74,68 +57,14 @@ export default class InvoiceModal extends React.Component {
           style={styles}
           contentLabel="Example Modal">
 
-              <p style={{textAlign: 'center'}}> Hello, Hope this email finds you well.</p> 
+          <div style={{display: 'flex', justifyContent: 'center'}}>
+            <InvoiceForm
+              toggleShowInput={this.toggleShowInput} />
+          
+          </div>
 
-              <p style={{textAlign: 'center'}}>
-                {'Here are your outstanding invoices for '}
-                <span onClick={this.toggleShowInput}>
-                  { showInput
-                    ? myInput
-                    : companyName ? companyName : () => this.toggleShowInput(showInput)
-                  }
-                </span>
-              </p>
-              <hr style={{width: '500px'}} />
-              <table style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                <tr>
-                  <th>INVOICE TOTAL:</th>
-                  <th style={{paddingLeft: '100px'}}>{total}</th>
-                </tr>
-              </table>
-              <hr />
-
-              <table style={{marginLeft: 'auto', marginRight: 'auto'}}>
-                <tr>
-                  <th style={{textAlign: 'left'}}> Invoice # </th>
-                  <th> Date </th>
-                  <th style={{textAlign: 'right'}}> Amount </th>
-                  <th style={{paddingLeft: '20px'}}> Notes </th>
-                </tr>
-                <tr>
-                  <th style={{textAlign: 'left'}}> {/* Invoice # */}
-                    <span>
-                      <input tabindex="2" />
-                    </span>
-                  </th>
-                  <th>  {/* Date */}
-                    <span>
-                      <input tabindex="3" />
-                    </span>
-                  </th>
-                  <th style={{textAlign: 'right'}}> {/* Amount */}
-                    <span>
-                      <input tabindex="4" />
-                    </span>
-                  </th>
-                  <th style={{paddingLeft: '20px'}}>  {/* Notes */}
-                    <span>
-                      <input tabindex="5" />
-                    </span>
-                  </th>
-                  <th><button tabindex="99">save</button></th>
-                </tr>
-              </table>
-              <hr style={{width: '500px'}} />
-                <table style={{marginLeft: 'auto', marginRight: 'auto', padding: '10px'}}>
-                  <tr>
-                    <th> Thank You! </th>
-                  </tr>
-                  <tr>
-                    <th> Some Professional Company LLC </th>
-                  </tr>
-                </table>
-            <button onClick={this.closeModal}>close</button>
-            <button onClick={this.sendInvoice}>send</button>
+          <button onClick={this.closeModal}>close</button>
+          <button onClick={this.sendInvoice}>send</button>
         </Modal>
         <AttachInvoices handleClick={this.toggleInvoiceModal}>Attach Invoices</AttachInvoices>
       </div>

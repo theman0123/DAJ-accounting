@@ -117,6 +117,7 @@ const styles = {
     borderColor: 'black',
     fontSize: '1.5em',
     boxShadow: '.25em .25em .5em .15em #A4A486',
+    cursor: 'pointer',
   },
   font: {
     fontSize: '1.25em',
