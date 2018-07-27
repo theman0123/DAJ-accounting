@@ -1,18 +1,17 @@
 import React from 'react'
 import Modal from 'react-modal'
+import { connect } from 'react-redux'
 import AttachInvoices from '../components/Button'
 import InvoiceForm from '../components/InvoiceForm'
 
 Modal.setAppElement('#root')
 
-export default class InvoiceModal extends React.Component {
+class InvoiceModal extends React.Component {
   constructor() {
     super();
 
     this.state = {
       modalIsOpen: false,
-      showInput: true,
-      total: 0,
     };
 
     this.openModal = this.openModal.bind(this);
@@ -34,15 +33,7 @@ export default class InvoiceModal extends React.Component {
   }
   
   toggleInvoiceModal = () => {
-    console.log('clicked', this.props)
     this.state.modalIsOpen ? this.closeModal() : this.openModal()
-  }
-
-  toggleShowInput = (show) => {
-    const { companyName } = this.props
-    
-    if (!show && !companyName) this.setState({showInput: true})
-    return null
   }
 
   render() {
@@ -58,8 +49,7 @@ export default class InvoiceModal extends React.Component {
           contentLabel="Example Modal">
 
           <div style={{display: 'flex', justifyContent: 'center'}}>
-            <InvoiceForm
-              toggleShowInput={this.toggleShowInput} />
+            <InvoiceForm />
           
           </div>
 
@@ -71,6 +61,10 @@ export default class InvoiceModal extends React.Component {
     )
   }
 }
+
+export default connect(
+  ({invoice}) => ({companyName: invoice.get('companyName')})
+)(InvoiceModal)
 
 const styles = {
   modal: {

@@ -7,6 +7,7 @@ export const REMOVE_RECIPIENT = 'REMOVE_RECIPIENT'
 export const CONFIRM_AND_LOCK = 'CONFIRM_AND_LOCK'
 export const INVOICE_ID = 'INVOICE_ID'
 export const AMOUNT = 'AMOUNT'
+export const UPDATE_COMPANY_NAME = 'UPDATE_COMPANY_NAME'
 // BBC or CC? difference?
 
 export const updateTemplate = (
@@ -19,6 +20,11 @@ export const updateTemplate = (
     invoiceId,
     payload,
   })
+
+export const updateCompanyName = (payload) => ({
+  type: UPDATE_COMPANY_NAME,
+  payload,
+})
 
 export const confirmAndLock = (invoiceId: invoiceIdType) => ({
   type: CONFIRM_AND_LOCK,

@@ -1,5 +1,6 @@
 import { fromJS } from 'immutable'
 import {
+  UPDATE_COMPANY_NAME,
   AMOUNT,
   ADD_RECIPIENT,
   REMOVE_RECIPIENT,
@@ -31,7 +32,7 @@ import {
 // };
 
 const initialState = fromJS({
-  from: '',
+  companyName: '',
   recipients: [],
   subject: '',
   invoices: {},
@@ -39,6 +40,8 @@ const initialState = fromJS({
 
 export default function invoice (state = initialState, action) {
   switch (action.type) {
+    case UPDATE_COMPANY_NAME:
+      return state.merge({companyName: action.payload})
     case SUBJECT:
       return state.merge({ subject: action.payload })
     case ADD_RECIPIENT:
