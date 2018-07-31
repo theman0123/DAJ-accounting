@@ -7,19 +7,40 @@ export const REMOVE_RECIPIENT = 'REMOVE_RECIPIENT'
 export const CONFIRM_AND_LOCK = 'CONFIRM_AND_LOCK'
 export const INVOICE_ID = 'INVOICE_ID'
 export const AMOUNT = 'AMOUNT'
+export const DATE = 'DATE'
+export const NOTES = 'NOTES'
 export const UPDATE_COMPANY_NAME = 'UPDATE_COMPANY_NAME'
+export const ADD_ROW = 'ADD_ROW'
+export const SET_ROW_ID = 'SET_ROW_ID'
+
 // BBC or CC? difference?
 
 export const updateTemplate = (
-  inputType,
-  invoiceId,
+  type,
+  rowId,
   payload
 ) =>
   ({
     type,
-    invoiceId,
+    rowId,
     payload,
   })
+
+export const addAndSetNewRowId = () => {
+  return function(dispatch) {
+    dispatch(addRowId())
+    dispatch(setRowId())
+  }
+}
+
+const addRowId = () => ({
+  type: ADD_ROW,
+})
+
+const setRowId = (payload = -1) => ({
+  type: SET_ROW_ID,
+  payload,
+})
 
 export const updateCompanyName = (payload) => ({
   type: UPDATE_COMPANY_NAME,

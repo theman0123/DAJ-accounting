@@ -2,6 +2,7 @@ import React from 'react'
 import Button from './Button'
 import { connect } from 'react-redux'
 import * as invoiceActionCreators from '../actions/invoice.js'
+import InvoiceRow from './InvoiceRow'
 
 class InvoiceForm extends React.Component {
   constructor (props) {
@@ -33,11 +34,21 @@ class InvoiceForm extends React.Component {
     
     this.setState({showInput: true})
   }
+  
+  syncStore = (name, id, value) => {
+    console.log(this.props)
+    this.props.updateTemplate(name, id, value)
+  }
+  
+  addInvoice = () => {
+    console.log('clicked')
+    this.props.addAndSetNewRowId()
+  }
 
   render() {
     const { companyName } = this.props
     const { total, showInput } = this.state
-    console.log('state', this.state)
+
     const myInput = (
       <input
         style={styles.input}
@@ -49,17 +60,16 @@ class InvoiceForm extends React.Component {
         onKeyPress={this.handleKeyPress}
         value={companyName}/>
     )
-    
+
     return (
       <table>
         <tbody>
-          
           <tr>
             <th style={styles.padB} colSpan="5">
               {'Hello, Hope this email finds you well'}
             </th>
           </tr>
-          
+
           <tr>
             <th
               style={styles.padB}
@@ -67,7 +77,7 @@ class InvoiceForm extends React.Component {
               {'Here are your outstanding invoices for '}
             </th>
           </tr>
-          
+
           <tr>
             <th
               colSpan="5"
@@ -79,9 +89,9 @@ class InvoiceForm extends React.Component {
                 }
             </th>
           </tr>
-          
+
           <tr>
-            {/* needs 'th' for 'tr' styles to be applied */}
+            {/* needs 'th' AND 'tr' for styles to be applied */}
             <th style={{...styles.line, ...styles.padB}} colSpan="5"></th>
           </tr>
           <tr>
@@ -89,7 +99,7 @@ class InvoiceForm extends React.Component {
             <th style={{...styles.padB, ...styles.padT}}>{total}</th>
           </tr>
           <tr>
-            {/* needs 'th' for 'tr' styles to be applied */}
+            {/* needs 'th' AND 'tr' for styles to be applied */}
             <th style={styles.line} colSpan="5"></th>
           </tr>
 
@@ -99,39 +109,31 @@ class InvoiceForm extends React.Component {
             <th style={{...styles.padB, ...styles.padT}}> Amount </th>
             <th style={{...styles.padB, ...styles.padT}}> Notes </th>
           </tr>
+
+          <InvoiceRow edit={true} rowId={this.props.currentRowId} syncStore={this.syncStore} />
+
           <tr>
-            <th> {/* Invoice # */}
-              <span>
-                <input style={styles.input} tabIndex="2" />
-              </span>
+            <th>{/* to help center the button */}</th>
+            <th
+              style={styles.saveBtn}
+              colSpan="2"
+              onClick={this.addInvoice}>
+                Add Invoice
             </th>
-            <th>  {/* Date */}
-              <span>
-                <input style={styles.input} tabIndex="3" />
-              </span>
-            </th>
-            <th> {/* Amount */}
-              <span>
-                <input style={styles.input} tabIndex="4" />
-              </span>
-            </th>
-            <th>  {/* Notes */}
-              <span>
-                <input style={styles.input} tabIndex="5" />
-              </span>
-            </th>
-            <th style={styles.saveBtn} tabIndex="99">Save</th>
           </tr>
+
           <tr>
-            {/* needs 'th' for 'tr' styles to be applied */}
+            {/* needs 'th' AND 'tr' for styles to be applied */}
             <th style={{...styles.line, ...styles.padT}} colSpan="5"></th>
           </tr>
-            <tr>
-              <th colSpan="5"> Thank You! </th>
-            </tr>
-            <tr>
-              <th colSpan="5"> {companyName} </th>
-            </tr>
+
+          <tr>
+            <th colSpan="5"> Thank You! </th>
+          </tr>
+
+          <tr>
+            <th colSpan="5"> {companyName} </th>
+          </tr>
         </tbody>
       </table>
     )
@@ -140,7 +142,9 @@ class InvoiceForm extends React.Component {
 
 const mapStateToProps = ({invoice}, props) => {
   return {
-    companyName: invoice.get('companyName')
+    companyName: invoice.get('companyName'),
+    maxRowId: invoice.get('maxRowId'),
+    currentRowId: invoice.get('currentRowId'),
   }
 }
 
