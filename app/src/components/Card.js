@@ -57,6 +57,7 @@ const styles = {
     textAlign: 'center',
     display: 'grid',
     boxShadow: '0.25em 0.25em .5em .1em #A0A0A0',
+    cursor: 'pointer',
   },
   name: {
     margin: '0.25em',

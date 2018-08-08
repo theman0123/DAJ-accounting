@@ -10,36 +10,18 @@ import {
   SUBJECT,
   NOTES,
   ADD_ROW,
-  SET_ROW_ID
+  SET_ROW,
+  SET_CURRENT_ROW_ID
 } from '../actions/invoice'
-
-// const initialInvoice = {
-//  amount: 0,
-//  rowId: null,
-//  confirmed: false,
-// }
-
-// 12345(objectId/rowId):{
-//     amount(inputType): 150.00,
-//     id(objectId/rowId): 12345,
-//     confirmed(confirmAndLock()): true,
-//  }
-// const manageInvoice = (state = initialInvoice, action) => {
-//  switch(inputType) {
-//    case INVOICE_ID:
-//      return state.merge({
-//        rowId: action.rowId
-//      })
-//    default:
-//      return state;
-//  };
-// };
 
 const initialState = fromJS({
   companyName: '',
   recipients: [],
   subject: '',
-  invoices: {},
+  invoices: {
+    1:{
+    },
+  },
   maxRowId: 1,
   currentRowId: 1,
 })
@@ -56,8 +38,10 @@ export default function invoice (state = initialState, action) {
       return state.updateIn(['recipients'], arr => arr.remove(action.payload))
     case ADD_ROW:
       return state.update('maxRowId', val => val += 1)
-    case SET_ROW_ID:
-      return state.merge({currentRowId: action.payload > 0 ? action.payload : state.get('maxRowId')})
+    case SET_ROW:
+      return state.setIn(['invoices', state.get('maxRowId')], fromJS({}))
+    case SET_CURRENT_ROW_ID:
+      return state.set('currentRowId', action.payload)
     case INVOICE_ID:
       return state.setIn(['invoices', action.rowId, 'invoiceId'], action.payload)
     case DATE:

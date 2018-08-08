@@ -11,6 +11,11 @@ class InvoiceForm extends React.Component {
     this.state = {total: 0, showInput: !this.props.companyName,}
   }
   
+  componentDidMount() {
+    console.log(this.props)
+//    this.props.setRowId()
+  }
+  
   sendInvoice() {
     console.log('invoice sent')
   }
@@ -36,18 +41,27 @@ class InvoiceForm extends React.Component {
   }
   
   syncStore = (name, id, value) => {
-    console.log(this.props)
+    console.log(name, id, value)
     this.props.updateTemplate(name, id, value)
   }
   
-  addInvoice = () => {
-    console.log('clicked')
-    this.props.addAndSetNewRowId()
+  addInvoice = (e, id = this.props.currentRowId) => {
+    e.preventDefault()
+    
+    id === this.props.currentRowId
+      ? this.props.addAndSetNewRow(id + 1)
+      : this.props.addAndSetNewRow(id)
+  }
+  
+  editRow = (rowId) => {
+//    console.log('edit row', rowId)
+    this.props.setCurrentRowId(rowId)
   }
 
   render() {
     const { companyName } = this.props
     const { total, showInput } = this.state
+    const invoices = this.props.invoices
 
     const myInput = (
       <input
@@ -110,7 +124,26 @@ class InvoiceForm extends React.Component {
             <th style={{...styles.padB, ...styles.padT}}> Notes </th>
           </tr>
 
-          <InvoiceRow edit={true} rowId={this.props.currentRowId} syncStore={this.syncStore} />
+          {invoices.map(({rowId, amount, date, invoiceId, notes}) => {
+
+            let details = {
+              amount,
+              date,
+              invoiceId,
+              notes,
+            }
+
+            return (
+              <InvoiceRow
+                key={rowId}
+                edit={this.props.currentRowId === rowId}
+                currentRowId={this.props.currentRowId}
+                details={details}
+                rowId={rowId}
+                syncStore={this.syncStore}
+                editRow={this.editRow} />
+            )
+          })}
 
           <tr>
             <th>{/* to help center the button */}</th>
@@ -141,8 +174,14 @@ class InvoiceForm extends React.Component {
 }
 
 const mapStateToProps = ({invoice}, props) => {
+  const invoices = invoice.get('invoices').toJS()
+  const keys = Object.keys(invoices)
+//  console.log()
+
+  // immutableJs replaced rowId when set on state. Placing it here for easy reference
   return {
     companyName: invoice.get('companyName'),
+    invoices: keys.map(keyNum => ({...invoices[keyNum], rowId: parseInt(keyNum)})),
     maxRowId: invoice.get('maxRowId'),
     currentRowId: invoice.get('currentRowId'),
   }

@@ -1,9 +1,10 @@
 import React from 'react'
 
-export default function InvoiceRow({invoiceNum, date, amount, notes, edit, syncStore, rowId}) {
-  return edit === true
+export default function InvoiceRow({details, toggleEdit, edit, syncStore, rowId, editRow, currentRowId}) {
+
+  return rowId === currentRowId || edit === 'undefined'
     ? (
-    <tr name={rowId}>
+    <tr row={rowId}>
       <th> {/* Invoice # */}
         <span>
           <input name="INVOICE_ID" style={styles.input} onChange={(e) => syncStore(e.target.name, rowId, e.target.value)} tabIndex="2" />
@@ -31,7 +32,33 @@ export default function InvoiceRow({invoiceNum, date, amount, notes, edit, syncS
       <th style={styles.saveBtn} tabIndex="99">Save</th>
     </tr>
   )
-  : null
+  : (
+    <tr 
+      row={rowId}
+      onClick={(e) => {
+        e.preventDefault()
+        editRow(e.currentTarget.getAttribute('row'))
+      }}>
+      {/* Invoice # */}
+      <th name="INVOICE_ID" tabIndex="2">
+        {details.invoiceId}
+      </th>
+      {/* Date */}
+      <th name="DATE" tabIndex="3">
+        {details.date}
+      </th>
+      {/* Amount */}
+      <th name="AMOUNT" tabIndex="4">
+        {details.amount}
+      </th>
+      {/* Notes */}
+      <th name="NOTES" tabIndex="5">
+        {details.notes}
+      </th>
+
+      <th style={styles.saveBtn} tabIndex="6">Save</th>
+    </tr>
+  )
 }
 
 const styles = {

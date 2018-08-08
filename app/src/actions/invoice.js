@@ -11,7 +11,8 @@ export const DATE = 'DATE'
 export const NOTES = 'NOTES'
 export const UPDATE_COMPANY_NAME = 'UPDATE_COMPANY_NAME'
 export const ADD_ROW = 'ADD_ROW'
-export const SET_ROW_ID = 'SET_ROW_ID'
+export const SET_ROW = 'SET_ROW'
+export const SET_CURRENT_ROW_ID = 'SET_CURRENT_ROW_ID'
 
 // BBC or CC? difference?
 
@@ -26,20 +27,25 @@ export const updateTemplate = (
     payload,
   })
 
-export const addAndSetNewRowId = () => {
+export const addAndSetNewRow = (id) => {
   return function(dispatch) {
-    dispatch(addRowId())
-    dispatch(setRowId())
+    dispatch(addRow())
+    dispatch(setRow())
+    dispatch(setCurrentRowId(id))
   }
 }
 
-const addRowId = () => ({
+const addRow = () => ({
   type: ADD_ROW,
 })
 
-const setRowId = (payload = -1) => ({
-  type: SET_ROW_ID,
-  payload,
+const setRow = () => ({
+  type: SET_ROW,
+})
+
+export const setCurrentRowId = (id) => ({
+  type: SET_CURRENT_ROW_ID,
+  payload: id,  
 })
 
 export const updateCompanyName = (payload) => ({
@@ -62,15 +68,3 @@ export const removeRecipient = payload => ({
   type: REMOVE_RECIPIENT,
   payload,
 })
-
-// subject(inputType): 'Bill: Urgent',
-// to: ['email@email.com'],
-// from: ['from@email.com'],
-// invoices: {
-//   12345(invoiceId/invoiceId):{
-//     amount(inputType): 150.00,
-//     id(invoiceId/invoiceId): 12345,
-//     confirmed(confirmAndLock()): true,
-//  }
-// }
-// total = invoices.reduce((prev, next) => return prev += [next]amount)
