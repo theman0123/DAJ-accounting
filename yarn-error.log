@@ -1,0 +1,32 @@
+Arguments: 
+  /home/spencer/.nvm/versions/node/v8.9.4/bin/node /home/spencer/.yarn/bin/yarn.js start
+
+PATH: 
+  /home/spencer/.yarn/bin:/home/spencer/.config/yarn/global/node_modules/.bin:/home/spencer/anaconda3/bin:/home/spencer/.nvm/versions/node/v8.9.4/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/spencer/bin:/home/spencer/code/coding-programs/jdk1.8.0_141/bin:~/bin
+
+Yarn version: 
+  1.5.1
+
+Node version: 
+  8.9.4
+
+Platform: 
+  linux x64
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: Couldn't find a package.json file in "/home/spencer/Desktop/ids"
+      at new MessageError (/home/spencer/.yarn/lib/cli.js:186:110)
+      at /home/spencer/.yarn/lib/cli.js:40048:15
+      at Generator.next (<anonymous>)
+      at step (/home/spencer/.yarn/lib/cli.js:98:30)
+      at /home/spencer/.yarn/lib/cli.js:109:13
+      at <anonymous>

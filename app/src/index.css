@@ -2,15 +2,20 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 /* color pallete
+gradient body: #C4CEF9 #D8EAF5
 
-green card border-left: #BCF1AC
+header: #9FE4CC
 
+gray body of card: #7D8584
+
+nav menu: #9FE4CC
+nav menu shadow: #A4A486
 */
-
 body {
   margin: 0;
   padding: 0;
   font-family: 'Lora', serif;
+  background: #FDFBF0;
 }
 
 a {

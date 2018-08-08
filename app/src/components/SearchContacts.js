@@ -36,8 +36,9 @@ export default class extends React.Component {
 const styles = {
   input: {
     padding: '.25em',
-    fontSize: '1.25em',
-    fontFamily: 'Roboto, serif',
-    color: '#7F8081'
+    fontSize: '1.5em',
+    fontFamily: 'Roboto, serif, Arial',
+    color: '#7F8081',
+    maxWidth: '12em',
   }
 }

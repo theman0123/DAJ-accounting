@@ -1,91 +1,148 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import SearchContacts from 'components/SearchContacts';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import * as invoiceActionCreators from '../actions/invoice' 
+import SearchContacts from 'components/SearchContacts'
+import Card from 'components/Card'
+import Error from '../components/Error'
+import InvoiceModal from '../components/InvoiceModal'
+
+// note: state is keeping track of Card id's @selected and search @results
+// redux is keeping track of added emails (all for a given card) @invoice.recipients
 
 class BuildInvoices extends React.Component {
-  constructor(props) {
-    super(props);
-    
-    this.state = {}
-  }
-  
-  componentDidMount () {
-    
-  }
-  
-  handleSearch (value) {
-    console.log('searching....', value)
-    //fetch contacts
-  }
-  
-  render() {
-    const {authedId} = this.props;
-    
-    return this.props.isAuthed === true
-      ? <Redirect to="/google-login" />
-      :(
-      <div>
-        <SearchContacts handleSearch={this.handleSearch}/>
-        <div style={styles.wrapper}>
-          <div style={styles.card}>
-            <div style={styles.header}>
-              <h3 style={styles.name}>{'spencer james'}</h3>
+  constructor (props) {
+    super(props)
 
-            </div>
-            <div style={styles.body}>
-              <h4 style={styles.email}>{'email@knowsit.com'}</h4>
-            </div>
+    this.state = {results: [], error: '', selected: []}
+  }
+
+  handleSearch = (value) => {
+    //make cards searchable
+    const results = []
+    const { connections } = this.props
+    const regex = new RegExp(value, 'gi')
+
+    if (value === "") this.setState({error: `cannot search for ""`, results: []})
+
+    else {
+      this.setState({error: ''})
+      connections.filter(person => {
+        const name = person.get('fullName')
+        const emails = person.get('emails')
+
+        name.match(regex)
+          ? results.push(person)
+          : null
+      })
+
+      results.length > 0
+        ? this.setState({results})
+        : this.setState({error: `No found matches for "${value}"`, results: []})
+    }
+  }
+
+  handleCardClick = (e, {emails, fullName, id}) => {
+    e.preventDefault()
+    const { selected } = this.state
+
+    if (emails === null) return this.setState({error: `no email for this card: ${fullName}`})
+
+    emails.map((email, index) => {
+      const value = email.get(index)
+      const recipients = this.props.recipients
+
+      // reset error for smooth error recovery
+      if (this.state.error) this.setState({error: ''})
+      // remove email/value if exists in list of recipients
+      if (this.findIn(recipients, value)) {
+        this.props.removeRecipient(index)
+        this.setState({selected: selected.filter(cardId => cardId !== id)})
+      }
+      // otherwise place value in redux store
+      else {
+        this.props.addRecipient(value),
+        this.setState({selected: selected.concat(id)})
+      }
+    })
+  }
+  
+  findIn(list, value) {
+    return list.find(item => item === value )
+  }
+
+  render () {
+    const { error, results, selected } = this.state
+    const contactsError = this.props.error
+    
+    return this.props.isAuthed === false
+      ? <Redirect to='/google-login' />
+      : (
+        <div style={styles.mainContainer}>
+          <div style={styles.topContainer}>
+            <SearchContacts handleSearch={this.handleSearch}/>
+            <InvoiceModal />
           </div>
+          {error
+            ? <Error error={error} />
+            : contactsError
+              ? <Error error={contactsError} />
+              : null }
+          {results.length > 0
+            ? results.map(person => {
+              let p = {
+                id: person.get('resourceName'),
+                fullName: person.get('fullName'),
+                emails: person.get('emails'),
+              }
+              return <Card
+                       key={p.id}
+                       details={p}
+                       getEmails={this.handleCardClick}
+                       selected={selected}/>
+            })
+            : null}
         </div>
-      </div>
-    )
+      )
   }
 }
-//          <div style={styles.selected}></div>
 
-const mapStateToProps = ({user}) => {
-  const uid = user.get('authedId')
-  const info = user.getIn([uid, 'info'])//needed?
-  
+const mapStateToProps = ({user, contacts, invoice}) => {
+  const recipients = invoice.get('recipients')
+
   return {
     isAuthed: user.get('isAuthed'),
-    authedId: user.get('authedId')
+    connections: contacts.get('list'),
+    recipients: recipients.size > 0 ? recipients : [],
+    error: contacts.get('error'),
   }
 }
 
-export default connect(mapStateToProps)(BuildInvoices);
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(invoiceActionCreators, dispatch)
+}
 
+export default connect(mapStateToProps, mapDispatchToProps)(BuildInvoices)
+
+BuildInvoices.propTypes = {
+  isAuthed: PropTypes.bool.isRequired,
+  recipient: PropTypes.array,
+  get: PropTypes.func,
+  addRecipient: PropTypes.func.isRequired,
+  removeRecipient: PropTypes.func.isRequired,
+}
+// convert to grid -topContainer //
 const styles = {
-  wrapper: {
+  topContainer: {
     display: 'flex',
-    background: '#BCF1AC',
-    width: '0.5em',
-    height: '5em',
+    margin: '2em',
   },
-  selected: {
-  },
-  header: {
-    background: 'white',
-  },
-  body: {
-    height: '100%',
-    background: 'linear-gradient(to bottom right, #F6F7DC, #D9FBFA)',
-  },
-  card: {
-    height: '5em',
-    width: '10em',
-    borderStyle: 'solid',
-    borderRadius: '0.25em',
-    textAlign: 'center',
-    borderLeft: 'none',
-  },
-  name: {
-    margin: '0.25em',
-    padding: '0',
-  },
-  email: {
-    margin: '0.25em',
-    padding: '0',
-  },
+  mainContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    
+  }
 }
