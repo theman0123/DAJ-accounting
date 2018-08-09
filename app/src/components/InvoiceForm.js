@@ -41,7 +41,6 @@ class InvoiceForm extends React.Component {
   }
   
   syncStore = (name, id, value) => {
-    console.log(name, id, value)
     this.props.updateTemplate(name, id, value)
   }
   
@@ -183,7 +182,7 @@ const mapStateToProps = ({invoice}, props) => {
     companyName: invoice.get('companyName'),
     invoices: keys.map(keyNum => ({...invoices[keyNum], rowId: parseInt(keyNum)})),
     maxRowId: invoice.get('maxRowId'),
-    currentRowId: invoice.get('currentRowId'),
+    currentRowId: parseInt(invoice.get('currentRowId')),
   }
 }
 
