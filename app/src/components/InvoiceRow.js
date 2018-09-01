@@ -7,29 +7,28 @@ export default function InvoiceRow({details, toggleEdit, edit, syncStore, rowId,
     <tr row={rowId}>
       <th> {/* Invoice # */}
         <span>
-          <input name="INVOICE_ID" style={styles.input} onChange={(e) => syncStore(e.target.name, rowId, e.target.value)} tabIndex="2" />
+          <input name="INVOICE_ID" style={styles.input} value={details.invoiceId} value={details.invoiceId} onChange={(e) => syncStore(e.target.name, rowId, e.target.value)} tabIndex="2" />
         </span>
       </th>
 
       <th>  {/* Date */}
         <span>
-          <input name="DATE" style={styles.input} onChange={(e) => syncStore(e.target.name, rowId, e.target.value)} tabIndex="3" />
+          <input name="DATE" style={styles.input} value={details.date} onChange={(e) => syncStore(e.target.name, rowId, e.target.value)} tabIndex="3" />
         </span>
       </th>
 
       <th> {/* Amount */}
         <span>
-          <input name="AMOUNT" style={styles.input} onChange={(e) => syncStore(e.target.name, rowId, e.target.value)} tabIndex="4" />
+          <input name="AMOUNT" style={styles.input} value={details.amount} onChange={(e) => syncStore(e.target.name, rowId, e.target.value)} tabIndex="4" />
         </span>
       </th>
 
       <th>  {/* Notes */}
         <span>
-          <input name="NOTES" style={styles.input} onChange={(e) => syncStore(e.target.name, rowId, e.target.value)} tabIndex="5" />
+          <input name="NOTES" style={styles.input} value={details.notes} onChange={(e) => syncStore(e.target.name, rowId, e.target.value)} tabIndex="5" />
         </span>
       </th>
 
-      <th style={styles.saveBtn} tabIndex="99">Save</th>
     </tr>
   )
   : (
@@ -56,7 +55,6 @@ export default function InvoiceRow({details, toggleEdit, edit, syncStore, rowId,
         {details.notes}
       </th>
 
-      <th style={styles.saveBtn} tabIndex="6">Save</th>
     </tr>
   )
 }
