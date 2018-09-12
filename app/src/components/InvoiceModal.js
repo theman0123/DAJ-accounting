@@ -1,7 +1,7 @@
 import React from 'react'
 import Modal from 'react-modal'
 import { connect } from 'react-redux'
-import AttachInvoices from '../components/Button'
+import Button from '../components/Button'
 import InvoiceForm from '../components/InvoiceForm'
 
 Modal.setAppElement('#root')
@@ -45,7 +45,7 @@ class InvoiceModal extends React.Component {
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
-          style={styles}
+          style={styles.modal}
           contentLabel="Example Modal">
 
           <div style={{display: 'flex', justifyContent: 'center'}}>
@@ -53,10 +53,29 @@ class InvoiceModal extends React.Component {
           
           </div>
 
-          <button onClick={this.closeModal}>close</button>
-          <button onClick={this.sendInvoice}>send</button>
+          <div style={styles.horizontalChildren}>
+            <Button
+              size={'small'}
+              theme={'light'}
+              onClick={this.closeModal}
+              style={styles.saveBtn}
+              handleClick={this.toggleInvoiceModal}>
+                close
+            </Button>
+            <Button
+              size={'medium'}
+              theme={'light'}
+              onClick={this.sendInvoice}>
+                send
+            </Button>
+          </div>
         </Modal>
-        <AttachInvoices handleClick={this.toggleInvoiceModal}>Attach Invoices</AttachInvoices>
+        <Button
+          size={'large'}
+          theme={'dark'}
+          handleClick={this.toggleInvoiceModal}>
+            Attach Invoices
+        </Button>
       </div>
     )
   }
@@ -68,11 +87,27 @@ export default connect(
 
 const styles = {
   modal: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   input: {
     color: 'lightgrey',
   },
   content : {
     background: '#fff',
+  },
+  saveBtn: {
+    padding: '.25em',
+    background: '#8EE0C4',
+    borderColor: 'black',
+    boxShadow: '.25em .25em .5em .15em #A4A486',
+    cursor: 'pointer',
+  },
+  horizontalChildren: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 }

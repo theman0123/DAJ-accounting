@@ -147,10 +147,9 @@ class InvoiceForm extends React.Component {
           <tr>
             <th>{/* to help center the button */}</th>
             <th
-              style={styles.saveBtn}
               colSpan="2"
               onClick={this.addInvoice}>
-                Add Invoice
+                <Button theme={'light'} >Add Invoice</Button>
             </th>
           </tr>
 

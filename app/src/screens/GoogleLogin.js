@@ -3,10 +3,13 @@ import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { Auth } from 'aws-amplify'
 import { GoogleLogin as GoogleAuth } from 'react-google-login'
 import Error from '../components/Error'
 import * as userActionCreators from '../actions/user'
 import * as contactsActionCreators from '../actions/contacts'
+
+const BASE_URL = 'http://localhost:4000'
 
 class GoogleLogin extends React.Component {
   constructor (props) {
@@ -15,13 +18,27 @@ class GoogleLogin extends React.Component {
     this.state = { redirect: false }
   }
 
-  success = response => {
-    this.props.fetchAndHandleAuthedUser(response.profileObj)
-
+  success = res => {
+    this.props.fetchAndHandleAuthedUser(res.profileObj)
+    
+    console.log('success: res: ', res)
+    
+    // Initiate federated sign-in with Google identity provider 
+    Auth.federatedSignIn('google',
+      { 
+        // the JWT token
+        token: res.tokenId, 
+        // the expiration time
+        expires_at: res.tokenObj.expires_at, 
+      },
+    ).then((user) => {
+      console.log('user: ', user)
+    })
+    // FETCH USING LAMBDAS
     this.props.fetchingContacts()
     fetch(`https://people.googleapis.com/v1/people/me/connections?personFields=names,emailAddresses&pageSize=2000`, {
       headers: {
-        'Authorization': `Bearer ${response.accessToken}`,
+        'Authorization': `Bearer ${res.accessToken}`,
       },
     })
       .then(res => res.json())
@@ -46,9 +63,10 @@ class GoogleLogin extends React.Component {
     this.setState({redirect: true})
   }
 
-  failure = response => {
-    return this.props.fetchingUserFailure(response.error)
+  failure = res => {
+    return this.props.fetchingUserFailure(res.error)
   }
+  
   render () {
     return this.state.redirect === true
       ? <Redirect to='/build-invoices' />
@@ -56,7 +74,6 @@ class GoogleLogin extends React.Component {
         <div style={styles.container}>
           <Error error={this.props.error} />
           <div style={styles.font}> {'Login with'} </div>
-          {/* autoLoad only works on return visits with no browser refresh in developement */}
           <GoogleAuth
             clientId='86405562588-35bph3tgcq360c3udgfsluih3ub4tquv.apps.googleusercontent.com'
             buttonText='Google'

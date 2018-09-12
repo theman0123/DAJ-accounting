@@ -1,12 +1,12 @@
 import React from 'react'
 
-export default ({details, selected, getEmails}) => {
+export default ({details, selected, getEmails, seeMultipleEmails}) => {
   const {wrapper, header, card, highlight, body, name, email} = styles
 
   const cardStyles = selected.find(id => id === details.id)
     ? highlight
     : card
-
+console.log(details.emails)
   return details
     ? (
     <div style={styles.wrapper}>
@@ -20,7 +20,12 @@ export default ({details, selected, getEmails}) => {
 
         </div>
         <div style={styles.body}>
-          <h4 style={styles.email}>{details.emails ? details.emails : 'no email'}</h4>
+          <h4 style={styles.email}>{details.emails ? details.emails[0] : 'no email'}</h4>
+          {!details.emails
+            ? null
+            : details.emails.length > 1
+              ? (<h4 style={styles.header}>...</h4>)
+              : null}
         </div>
       </div>
     </div>
@@ -43,11 +48,14 @@ const styles = {
   },
   header: {
     background: 'white',
-    boxShadow: 'inset 0em 0em 1em #535354'
+    boxShadow: 'inset 0em 0em 1em #535354',
+    color: 'black',
   },
   body: {
     background: '#7D8584',
     color: 'white',
+    maxHeight: '4em',
+    borderBottom: 'solid black .1em'
   },
   card: {
     margin: '1em',
@@ -64,7 +72,7 @@ const styles = {
     padding: '0',
   },
   email: {
-    margin: '0.25em',
+    margin: '0.15em',
     padding: '0',
   },
 }
