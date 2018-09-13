@@ -8,7 +8,7 @@ class InvoiceForm extends React.Component {
   constructor (props) {
     super(props)
     
-    this.state = {total: 0, showInput: !this.props.companyName,}
+    this.state = {showInput: !this.props.companyName,}
   }
   
   componentDidMount() {
@@ -42,6 +42,8 @@ class InvoiceForm extends React.Component {
   
   syncStore = (name, id, value) => {
     this.props.updateTemplate(name, id, value)
+    // run action that calculates total
+    if (name === 'AMOUNT') this.props.alterTotal(value)
   }
   
   addInvoice = (e, id = this.props.currentRowId) => {
@@ -58,10 +60,10 @@ class InvoiceForm extends React.Component {
   }
 
   render() {
-    const { companyName } = this.props
-    const { total, showInput } = this.state
+    const { companyName, total } = this.props
+    const { showInput } = this.state
     const invoices = this.props.invoices
-
+console.log(total ? total : null, this.props)
     const myInput = (
       <input
         style={styles.input}
@@ -109,7 +111,7 @@ class InvoiceForm extends React.Component {
           </tr>
           <tr>
             <th style={{...styles.padB, ...styles.padT}} colSpan="3">INVOICE TOTAL:</th>
-            <th style={{...styles.padB, ...styles.padT}}>{total}</th>
+            <th style={{...styles.padB, ...styles.padT}}>$ {total ? total : 0}</th>
           </tr>
           <tr>
             {/* needs 'th' AND 'tr' for styles to be applied */}
@@ -182,6 +184,7 @@ const mapStateToProps = ({invoice}, props) => {
     invoices: keys.map(keyNum => ({...invoices[keyNum], rowId: parseInt(keyNum)})),
     maxRowId: invoice.get('maxRowId'),
     currentRowId: parseInt(invoice.get('currentRowId')),
+    total: invoice.get('total'),
   }
 }
 
