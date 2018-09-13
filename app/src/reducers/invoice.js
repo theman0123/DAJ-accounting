@@ -53,7 +53,6 @@ export default function invoice (state = initialState, action) {
     case NOTES:
       return state.setIn(['invoices', action.rowId, 'notes'], action.payload)
     case ALTER_TOTAL:
-      console.group('Total')
       return state.update('total', val => {
         const invoices = state.get('invoices')
         return invoices.reduce((total, value) => {

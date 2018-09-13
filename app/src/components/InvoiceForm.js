@@ -8,12 +8,10 @@ class InvoiceForm extends React.Component {
   constructor (props) {
     super(props)
     
-    this.state = {showInput: !this.props.companyName,}
+    this.state = {showInput: !this.props.companyName, helperError: ''}
   }
   
   componentDidMount() {
-    console.log(this.props)
-//    this.props.setRowId()
   }
   
   sendInvoice() {
@@ -48,14 +46,16 @@ class InvoiceForm extends React.Component {
   
   addInvoice = (e, id = this.props.currentRowId) => {
     e.preventDefault()
+// have way of keeping empty cells instead of them disappearing
+    let checkForBlanks = this.props.invoices.filter(row => row.rowId === this.props.maxRowId)
+
+    if (!checkForBlanks[0].invoiceId) return this.setState({ helperError: 'insert invoice number before adding another row' })
     
-    id === this.props.currentRowId
-      ? this.props.addAndSetNewRow(id + 1)
-      : this.props.addAndSetNewRow(id)
+    this.setState({helperError: ''})
+    this.props.addAndSetNewRow(this.props.maxRowId + 1)
   }
   
   editRow = (rowId) => {
-//    console.log('edit row', rowId)
     this.props.setCurrentRowId(rowId)
   }
 
@@ -147,7 +147,7 @@ console.log(total ? total : null, this.props)
           })}
 
           <tr>
-            <th>{/* to help center the button */}</th>
+            <th>{/* to help center the button */this.state.helperError}</th>
             <th
               colSpan="2"
               onClick={this.addInvoice}>
