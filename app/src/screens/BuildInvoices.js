@@ -51,26 +51,26 @@ class BuildInvoices extends React.Component {
     if (emails === null) return this.setState({error: `no email for this card: ${fullName}`})
 
     emails.map((email, index) => {
-      const value = email.get(index)
+      console.log(email)
       const recipients = this.props.recipients
 
-      // reset error for smooth error recovery
+//      // reset error for smooth error recovery
       if (this.state.error) this.setState({error: ''})
-      // remove email/value if exists in list of recipients
-      if (this.findIn(recipients, value)) {
+//      // remove email/value if exists in list of recipients
+      if (this.findIn(recipients, email[0])) {
         this.props.removeRecipient(index)
         this.setState({selected: selected.filter(cardId => cardId !== id)})
       }
-      // otherwise place value in redux store
+//      // otherwise place value in redux store
       else {
-        this.props.addRecipient(value),
+        this.props.addRecipient(email[0]),
         this.setState({selected: selected.concat(id)})
       }
     })
   }
   
-  findIn(list, value) {
-    return list.find(item => item === value )
+  findIn(list, email) {
+    return list.find(item => item === email )
   }
 
   render () {
@@ -158,7 +158,7 @@ const styles = {
     gridTemplateRows: 'repeat(auto-fit, minmax(5em, 6em))',
     justifyItems: 'center',
     gridGap: '1em',
-    padding: '2em'
+    padding: '2em',
   },
   error: {
     alignSelf: 'center',

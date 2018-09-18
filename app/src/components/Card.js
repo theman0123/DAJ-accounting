@@ -6,7 +6,7 @@ export default ({details, selected, getEmails, seeMultipleEmails}) => {
   const cardStyles = selected.find(id => id === details.id)
     ? highlight
     : card
-console.log(details.emails)
+//console.log(details.emails)
   return details
     ? (
     <div style={styles.wrapper}>
@@ -20,11 +20,11 @@ console.log(details.emails)
 
         </div>
         <div style={styles.body}>
-          <h4 style={styles.email}>{details.emails ? details.emails[0] : 'no email'}</h4>
+          <div style={styles.email}>{details.emails ? details.emails[0] : 'no email'}</div>
           {!details.emails
             ? null
             : details.emails.length > 1
-              ? (<h4 style={styles.header}>...</h4>)
+              ? (<div style={styles.header}>...</div>)
               : null}
         </div>
       </div>
@@ -38,7 +38,6 @@ const styles = {
     display: 'flex',
   },
   highlight: {
-    margin: '1em',
     width: '14em',
     borderStyle: 'solid',
     borderRadius: '0.25em',
@@ -54,11 +53,10 @@ const styles = {
   body: {
     background: '#7D8584',
     color: 'white',
-    maxHeight: '4em',
-    borderBottom: 'solid black .1em'
+    borderBottom: 'solid black .1em',
+    paddingBottom: '0.25em',
   },
   card: {
-    margin: '1em',
     width: '14em',
     border: 'solid black .1em',
     borderRadius: '0.25em',
@@ -66,13 +64,12 @@ const styles = {
     display: 'grid',
     boxShadow: '0.25em 0.25em .5em .1em #A0A0A0',
     cursor: 'pointer',
+    height: '100%',
   },
   name: {
     margin: '0.25em',
-    padding: '0',
   },
   email: {
     margin: '0.15em',
-    padding: '0',
   },
 }

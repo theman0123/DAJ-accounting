@@ -63,7 +63,7 @@ class InvoiceForm extends React.Component {
     const { companyName, total } = this.props
     const { showInput } = this.state
     const invoices = this.props.invoices
-console.log(total ? total : null, this.props)
+
     const myInput = (
       <input
         style={styles.input}

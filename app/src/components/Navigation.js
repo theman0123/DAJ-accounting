@@ -131,7 +131,7 @@ const styles = {
     gridGap: '.25em',
     padding: '.5em',
     alignItems: 'center',
-    gridTemplateColumns: '[logo] 1fr 1fr 1fr 1fr [avatar] 1fr 1fr 1fr',
+    gridTemplateColumns: '[logo] 1fr 1fr 1fr 1fr 1fr [avatar] 1fr 1fr',
     gridTemplateRows: '7em'
   },
   logo: {
