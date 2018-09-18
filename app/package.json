@@ -21,6 +21,7 @@
     "history": "^4.7.2",
     "immutable": "^3.8.2",
     "informed": "^1.7.3",
+    "lodash": "^4.17.11",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-burger-menu": "^2.5.2",
