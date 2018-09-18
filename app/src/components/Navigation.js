@@ -1,16 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { decorator as reduxBurgerMenu } from 'redux-burger-menu/immutable';
-import { slide as Menu } from 'react-burger-menu';
-import { action as toggleMenu } from 'redux-burger-menu/immutable';
-import BuildNavRoutes from './BuildNavRoutes';
-import Avatar from './Avatar';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { decorator as reduxBurgerMenu } from 'redux-burger-menu/immutable'
+import { slide as Menu } from 'react-burger-menu'
+import { action as toggleMenu } from 'redux-burger-menu/immutable'
+import BuildNavRoutes from './BuildNavRoutes'
+import Avatar from './Avatar'
+import EmailLogo from 'react-svg-loader!../assets/email_logo.svg'
 
 class Navigation extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     
     this.state = {
       routes: [
@@ -28,14 +30,14 @@ class Navigation extends React.Component {
   }
   
   handleClick = (e, newSelect) => {
-    e.preventDefault();
-    this.setState({ selected: newSelect });
-    this.props.toggleMenu(false);
+    e.preventDefault()
+    this.setState({ selected: newSelect })
+    this.props.toggleMenu(false)
   }
 
   render() {
-    const BurgerMenu = reduxBurgerMenu(Menu);
-    const selected = this.state.selected;
+    const BurgerMenu = reduxBurgerMenu(Menu)
+    const selected = this.state.selected
     const logoutObj = {
       name: 'Logout', 
       URL: '/logout'
@@ -44,7 +46,9 @@ class Navigation extends React.Component {
     return (
       <div style={styles.container}>
         <div style={styles.mainHeader}>
-          <h1 style={styles.logo}> {'insert logo'} </h1>
+          <Link to='/'>
+            <EmailLogo width={'100%'} />
+          </Link>
           <Avatar image={this.props.avatar} />
         </div>
         
@@ -79,7 +83,7 @@ class Navigation extends React.Component {
           </BurgerMenu>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -102,9 +106,9 @@ const mapStateToProps = ({user}) => {
 const mapActionsToProps = (dispatch) =>
   bindActionCreators({
     toggleMenu
-  }, dispatch);
+  }, dispatch)
 
-export default connect(mapStateToProps, mapActionsToProps)(Navigation);
+export default connect(mapStateToProps, mapActionsToProps)(Navigation)
 
 //styles
 const styles = {
@@ -125,15 +129,16 @@ const styles = {
     gridRow: 'header',
     display: 'grid',
     gridGap: '.25em',
-    gridTemplateColumns: '[logo] 1fr 1fr 1fr 1fr [avatar] 1fr 1fr [icon]',
+    padding: '.5em',
+    alignItems: 'center',
+    gridTemplateColumns: '[logo] 1fr 1fr 1fr 1fr 1fr [avatar] 1fr 1fr',
     gridTemplateRows: '7em'
   },
   logo: {
-    fontWeight: 'bold',
-    gridColumn: 'logo'
+    gridArea: 'logo',
   },
   avatar: {
-    gridColumn: 'avatar',
+    gridArea: 'avatar',
   },
   bmBurgerButton: {
     position: 'fixed',
@@ -191,27 +196,27 @@ const styles = {
 //tests
 
 //describe('::NAVIGATION::', () => {
-//  let wrapper;
-//  let testStore;
+//  let wrapper
+//  let testStore
 //  beforeEach(() => {
-//    testStore = store();
-//    wrapper = shallow(<Navigation store={store}/>);
-//  });
+//    testStore = store()
+//    wrapper = shallow(<Navigation store={store}/>)
+//  })
 //  
 //  describe('it should be connected to store', () => {
 //    it('should be closed initially', () => {
-//      const initialBM = testStore.getState().burgerMenu.get('isOpen');
-//      expect(initialBM).toMatchSnapshot();
-//    });
-//  });
+//      const initialBM = testStore.getState().burgerMenu.get('isOpen')
+//      expect(initialBM).toMatchSnapshot()
+//    })
+//  })
 //  
 //  it('should display landing route from props.selected', () => {
-//    expect(wrapper.prop('selected')).toEqual('home');
-//  });
+//    expect(wrapper.prop('selected')).toEqual('home')
+//  })
 //  describe('BuildNavRoutes', () => {
 //    it('renders children', () => {
 //      expect(wrapper.dive().children().last().props())
-//        .toMatchSnapshot();
-//    });
-//  });
-//});
+//        .toMatchSnapshot()
+//    })
+//  })
+//})

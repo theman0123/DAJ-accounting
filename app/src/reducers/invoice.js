@@ -11,7 +11,8 @@ import {
   NOTES,
   ADD_ROW,
   SET_ROW,
-  SET_CURRENT_ROW_ID
+  SET_CURRENT_ROW_ID,
+  ALTER_TOTAL
 } from '../actions/invoice'
 
 const initialState = fromJS({
@@ -24,6 +25,7 @@ const initialState = fromJS({
   },
   maxRowId: 1,
   currentRowId: 1,
+  total: 0,
 })
 
 export default function invoice (state = initialState, action) {
@@ -50,6 +52,14 @@ export default function invoice (state = initialState, action) {
       return state.setIn(['invoices', action.rowId, 'amount'], action.payload)
     case NOTES:
       return state.setIn(['invoices', action.rowId, 'notes'], action.payload)
+    case ALTER_TOTAL:
+      return state.update('total', val => {
+        const invoices = state.get('invoices')
+        return invoices.reduce((total, value) => {
+          let checkAmount = value.get('amount') ? parseFloat(value.get('amount')) : 0
+          return total += checkAmount
+        }, 0)
+      })
     case CONFIRM_AND_LOCK:
       return state.setIn(['invoices', action.rowId, 'confirmAndLock'], true)
     default:

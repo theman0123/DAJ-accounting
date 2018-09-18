@@ -13,6 +13,7 @@ export const UPDATE_COMPANY_NAME = 'UPDATE_COMPANY_NAME'
 export const ADD_ROW = 'ADD_ROW'
 export const SET_ROW = 'SET_ROW'
 export const SET_CURRENT_ROW_ID = 'SET_CURRENT_ROW_ID'
+export const ALTER_TOTAL = 'ALTER_TOTAL'
 
 // BBC or CC? difference?
 
@@ -66,5 +67,10 @@ export const addRecipient = payload => ({
 // payload is an id
 export const removeRecipient = payload => ({
   type: REMOVE_RECIPIENT,
+  payload,
+})
+
+export const alterTotal = (payload) => ({
+  type: ALTER_TOTAL,
   payload,
 })

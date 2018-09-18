@@ -51,26 +51,26 @@ class BuildInvoices extends React.Component {
     if (emails === null) return this.setState({error: `no email for this card: ${fullName}`})
 
     emails.map((email, index) => {
-      const value = email.get(index)
+      console.log(email)
       const recipients = this.props.recipients
 
-      // reset error for smooth error recovery
+//      // reset error for smooth error recovery
       if (this.state.error) this.setState({error: ''})
-      // remove email/value if exists in list of recipients
-      if (this.findIn(recipients, value)) {
+//      // remove email/value if exists in list of recipients
+      if (this.findIn(recipients, email[0])) {
         this.props.removeRecipient(index)
         this.setState({selected: selected.filter(cardId => cardId !== id)})
       }
-      // otherwise place value in redux store
+//      // otherwise place value in redux store
       else {
-        this.props.addRecipient(value),
+        this.props.addRecipient(email[0]),
         this.setState({selected: selected.concat(id)})
       }
     })
   }
   
-  findIn(list, value) {
-    return list.find(item => item === value )
+  findIn(list, email) {
+    return list.find(item => item === email )
   }
 
   render () {
@@ -85,25 +85,32 @@ class BuildInvoices extends React.Component {
             <SearchContacts handleSearch={this.handleSearch}/>
             <InvoiceModal />
           </div>
-          {error
-            ? <Error error={error} />
-            : contactsError
-              ? <Error error={contactsError} />
-              : null }
-          {results.length > 0
-            ? results.map(person => {
-              let p = {
-                id: person.get('resourceName'),
-                fullName: person.get('fullName'),
-                emails: person.get('emails'),
-              }
-              return <Card
-                       key={p.id}
-                       details={p}
-                       getEmails={this.handleCardClick}
-                       selected={selected}/>
-            })
-            : null}
+          <div style={styles.error}>
+            {error
+              ? <Error error={error} />
+              : contactsError
+                ? <Error error={contactsError} />
+                : null }
+          </div>
+          <div style={styles.autoGrid}>
+            {results.length > 0
+              ? results.map(person => {
+                let checkForEmail = person.get('emails') ? person.get('emails') : null
+                let p = {
+                  id: person.get('resourceName'),
+                  fullName: person.get('fullName'),
+                  emails: checkForEmail ? checkForEmail.toJS() : null,
+                }
+                return (
+                  <Card
+                    key={p.id}
+                    details={p}
+                    getEmails={this.handleCardClick}
+                    selected={selected}/>
+                )
+              })
+              : null}
+          </div>
         </div>
       )
   }
@@ -133,16 +140,27 @@ BuildInvoices.propTypes = {
   addRecipient: PropTypes.func.isRequired,
   removeRecipient: PropTypes.func.isRequired,
 }
-// convert to grid -topContainer //
+
 const styles = {
   topContainer: {
     display: 'flex',
     margin: '2em',
+    alignSelf: 'center'
   },
   mainContainer: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    
+    alignContent: 'center',
+  },
+  autoGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(14em, 1fr))',
+    gridTemplateRows: 'repeat(auto-fit, minmax(5em, 6em))',
+    justifyItems: 'center',
+    gridGap: '1em',
+    padding: '2em',
+  },
+  error: {
+    alignSelf: 'center',
   }
 }

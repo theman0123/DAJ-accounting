@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import Navigation from './components/Navigation.js';
+import React, { Component } from 'react'
+import { withAuthenticator } from 'aws-amplify-react'
+import Navigation from './components/Navigation.js'
 import noise from '../public/images/noise.png'
 
 class App extends Component {
@@ -14,9 +15,9 @@ class App extends Component {
     );
   }
 }
-//src={noise}
-export default App;
 
+export default App
+//src={noise}
 const styles = {
   image: {
     height: '100%',
