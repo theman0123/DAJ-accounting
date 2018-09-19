@@ -35,10 +35,13 @@ export default class extends React.Component {
 
 const styles = {
   input: {
-    padding: '.25em',
+    padding: '1em',
     fontSize: '1.5em',
     fontFamily: 'Roboto, serif, Arial',
     color: '#7F8081',
     maxWidth: '12em',
+    border: '.5em',
+    borderRadius: '1em',
+    outline: 'none',
   }
 }

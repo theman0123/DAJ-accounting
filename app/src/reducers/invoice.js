@@ -37,7 +37,7 @@ export default function invoice (state = initialState, action) {
     case ADD_RECIPIENT:
       return state.updateIn(['recipients'], arr => arr.concat([action.payload]))
     case REMOVE_RECIPIENT:
-      return state.updateIn(['recipients'], arr => arr.remove(action.payload))
+      return state.set('recipients', state.get('recipients').filter(email => email !== action.payload))
     case ADD_ROW:
       return state.update('maxRowId', val => val += 1)
     case SET_ROW:
