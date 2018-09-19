@@ -1,12 +1,13 @@
 import React from 'react'
 import Modal from 'react-modal'
-import { connect } from 'react-redux'
 import Button from '../components/Button'
-import InvoiceForm from '../components/InvoiceForm'
+
 
 Modal.setAppElement('#root')
 
-class InvoiceModal extends React.Component {
+
+
+class RecipientModal extends React.Component {
   constructor() {
     super();
 
@@ -37,60 +38,77 @@ class InvoiceModal extends React.Component {
   }
 
   render() {
-    const { companyName } = this.props
-
+    const { recipients } = this.props
+    console.log(recipients)
     return (
       <div>
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
-          style={styles.modal}
-          contentLabel="Invoice Modal">
+          style={{
+            content: {
+              top: '0em',
+              left: '0em',
+              height: '30vh',
+              width: '50vw',
+              margin: '2em',
+            },
+            overlay: { background: 'rgba(255, 255, 255, 0.45)'}}}
+          contentLabel="Recipient Modal">
 
-          <div style={{display: 'flex', justifyContent: 'center'}}>
-            <InvoiceForm />
-          
-          </div>
+          <div style={styles.container}>
+            <div style={styles.listEmails}>
+              {recipients ? recipients.map(email => (
+                <div style={styles.emails}>{email}</div>
+              )) : null}
+            </div>
 
-          <div style={styles.horizontalChildren}>
-            <Button
-              size={'small'}
-              theme={'light'}
-              onClick={this.closeModal}
-              style={styles.saveBtn}
-              handleClick={this.toggleInvoiceModal}>
-                close
-            </Button>
-            <Button
-              size={'medium'}
-              theme={'light'}
-              onClick={this.sendInvoice}>
-                send
-            </Button>
+            <div style={styles.horizontalChildren}>
+              <Button
+                size={'small'}
+                theme={'light'}
+                onClick={this.closeModal}
+                style={styles.saveBtn}
+                handleClick={this.toggleInvoiceModal}>
+                  close
+              </Button>
+            </div>
           </div>
         </Modal>
+
         <Button
-          size={'large'}
-          theme={'dark'}
+          size={'small'}
+          theme={'light'}
           handleClick={this.toggleInvoiceModal}>
-            Attach Invoices
+            To...
         </Button>
       </div>
     )
   }
 }
 
-export default connect(
-  ({invoice}) => ({companyName: invoice.get('companyName')})
-)(InvoiceModal)
+export default RecipientModal
 
 const styles = {
-  modal: {
+  content: {
+    height: '50vh',
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  listEmails: {
+    fontFamily: 'Roboto',
+    fontSize: '1em',
+  },
+  emails: {
+    margin: '.5em',
+    padding: '.5em',
+    border: '.15em solid grey',
+    borderRadius: '.15em',
   },
   input: {
     color: 'lightgrey',

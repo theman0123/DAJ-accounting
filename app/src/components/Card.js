@@ -3,10 +3,8 @@ import React from 'react'
 export default ({details, selected, getEmails, seeMultipleEmails}) => {
   const {wrapper, header, card, highlight, body, name, email} = styles
 
-  const cardStyles = selected.find(id => id === details.id)
-    ? highlight
-    : card
-//console.log(details.emails)
+  const cardStyles = selected ? highlight : card
+
   return details
     ? (
     <div style={styles.wrapper}>
@@ -43,7 +41,8 @@ const styles = {
     borderRadius: '0.25em',
     textAlign: 'center',
     display: 'grid',
-    boxShadow: '0em 0.25em .75em .25em #BAD58C'
+    boxShadow: '0em 0.25em .75em .25em #BAD58C',
+    cursor: 'pointer',
   },
   header: {
     background: 'white',
@@ -64,7 +63,6 @@ const styles = {
     display: 'grid',
     boxShadow: '0.25em 0.25em .5em .1em #A0A0A0',
     cursor: 'pointer',
-    height: '100%',
   },
   name: {
     margin: '0.25em',
