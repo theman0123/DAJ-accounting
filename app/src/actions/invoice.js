@@ -64,7 +64,7 @@ export const addRecipient = payload => ({
   payload,
 })
 
-// payload is an id
+// payload is email as a string
 export const removeRecipient = payload => ({
   type: REMOVE_RECIPIENT,
   payload,
