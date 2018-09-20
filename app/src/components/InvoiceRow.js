@@ -34,6 +34,7 @@ export default function InvoiceRow({details, toggleEdit, edit, syncStore, rowId,
   : (
     <tr 
       row={rowId}
+      style={!details.invoiceId ? styles.row : {}}
       onClick={(e) => {
         e.preventDefault()
         editRow(e.currentTarget.getAttribute('row'))
@@ -72,5 +73,9 @@ const styles = {
     borderColor: 'black',
     boxShadow: '.25em .25em .5em .15em #A4A486',
     cursor: 'pointer',
+  },
+  row: {
+    height: '1.5em',
+    background: 'rgba(5, 55, 5, 0.1)',
   },
 }

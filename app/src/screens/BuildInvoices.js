@@ -10,7 +10,6 @@ import Error from '../components/Error'
 import InvoiceModal from '../components/InvoiceModal'
 import RecipientModal from '../components/RecipientModal'
 
-
 // state is tracking search results
 
 class BuildInvoices extends React.Component {
@@ -51,17 +50,16 @@ class BuildInvoices extends React.Component {
     if (emails === null) return this.setState({error: `no email for this card: ${fullName}`})
 
     emails.map((email, index) => {
-      console.log(email)
       const { recipients }  = this.props
 
-//      // reset error for smooth error recovery
+      // reset error for smooth error recovery
       if (this.state.error) this.setState({error: ''})
-      
-//      // remove email if exists in list of recipients
+
+      // remove email if exists in list of recipients
       if (this.findIn(recipients, email)) {
         this.props.removeRecipient(email)
       }
-//      // otherwise place value in redux store
+      // otherwise place value in redux store
       else {
         this.props.addRecipient(email)
       }
@@ -72,17 +70,23 @@ class BuildInvoices extends React.Component {
     return list.find(item => item === email )
   }
 
+  handleRemoveEmail = (e, email) => {
+    e.preventDefault()
+
+    this.props.removeRecipient(email)
+  }
+
   render () {
     const { error, results } = this.state
     const { recipients } = this.props
     const contactsError = this.props.error
-    
+
     return this.props.isAuthed === false
       ? <Redirect to='/google-login' />
       : (
         <div style={styles.mainContainer}>
           <div style={styles.topContainer}>
-            <RecipientModal recipients={recipients} />
+            <RecipientModal removeEmail={this.handleRemoveEmail} recipients={recipients} />
             <SearchContacts handleSearch={this.handleSearch}/>
             <InvoiceModal />
           </div>
@@ -97,19 +101,17 @@ class BuildInvoices extends React.Component {
             {results.length > 0
               ? results.map(person => {
                 // check for emails
-              
                 let checkForEmail = person.get('emails') ? person.get('emails') : null
                 let emailInJs = checkForEmail ? checkForEmail.toJS() : null
-                
-                // check logic for highlighting Cards
+
                 // emails come in nested array, p.emails flattens 'emailInJs'
-                
                 let p = {
                   id: person.get('resourceName'),
                   fullName: person.get('fullName'),
                   emails: checkForEmail ? emailInJs.reduce((acc, val) => acc.concat(val), []) : null,
                 }
 
+                // check logic for highlighting Cards
                 let toHighlight = p.emails ? this.props.recipients.some(email=> p.emails.includes(email)) : null
 
                 return (

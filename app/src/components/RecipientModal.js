@@ -5,8 +5,6 @@ import Button from '../components/Button'
 
 Modal.setAppElement('#root')
 
-
-
 class RecipientModal extends React.Component {
   constructor() {
     super();
@@ -39,7 +37,7 @@ class RecipientModal extends React.Component {
 
   render() {
     const { recipients } = this.props
-    console.log(recipients)
+
     return (
       <div>
         <Modal
@@ -60,7 +58,9 @@ class RecipientModal extends React.Component {
           <div style={styles.container}>
             <div style={styles.listEmails}>
               {recipients ? recipients.map(email => (
-                <div style={styles.emails}>{email}</div>
+                <div onClick={(e) => this.props.removeEmail(e, email)}
+                  style={styles.emails}
+                  key={email}>{email}</div>
               )) : null}
             </div>
 
@@ -107,8 +107,11 @@ const styles = {
   emails: {
     margin: '.5em',
     padding: '.5em',
-    border: '.15em solid grey',
-    borderRadius: '.15em',
+    borderRight: '.07em solid grey',
+    borderBottom: '.1em solid grey',
+    borderLeft: '.15em solid grey',
+    borderRadius: '0em 0em .5em 0em',
+    cursor: 'pointer',
   },
   input: {
     color: 'lightgrey',

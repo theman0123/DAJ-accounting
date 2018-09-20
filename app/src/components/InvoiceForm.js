@@ -7,17 +7,17 @@ import InvoiceRow from './InvoiceRow'
 class InvoiceForm extends React.Component {
   constructor (props) {
     super(props)
-    
+
     this.state = {showInput: !this.props.companyName, helperError: ''}
   }
-  
+
   componentDidMount() {
   }
-  
+
   sendInvoice() {
     console.log('invoice sent')
   }
-  
+
   handleCompanyName = (e) => {
     e.preventDefault()
     this.props.updateCompanyName(e.target.value)
@@ -27,36 +27,45 @@ class InvoiceForm extends React.Component {
     if (e.key === 'Enter') this.toggleShowInput(false)
     else null
   }
-  
+
   toggleShowInput = (bool) => {
     const { companyName } = this.props
     const { showInput } = this.state
 
     if (!companyName) this.setState({showInput: true})
     if (typeof bool === 'boolean') return this.setState({showInput: bool})
-    
+
     this.setState({showInput: true})
   }
-  
+
   syncStore = (name, id, value) => {
     this.props.updateTemplate(name, id, value)
     // run action that calculates total
     if (name === 'AMOUNT') this.props.alterTotal(value)
+
+    // reset error on invoice_id update
+    if (name === 'INVOICE_ID') this.setState({ helperError: ''})
   }
-  
+
   addInvoice = (e, id = this.props.currentRowId) => {
     e.preventDefault()
-// have way of keeping empty cells instead of them disappearing
-    let checkForBlanks = this.props.invoices.filter(row => row.rowId === this.props.maxRowId)
 
-    if (!checkForBlanks[0].invoiceId) return this.setState({ helperError: 'insert invoice number before adding another row' })
-    
-    this.setState({helperError: ''})
-    this.props.addAndSetNewRow(this.props.maxRowId + 1)
+    return this.checkInvoiceId(() => this.props.addAndSetNewRow(this.props.maxRowId + 1))
   }
-  
+
   editRow = (rowId) => {
     this.props.setCurrentRowId(rowId)
+  }
+  
+  checkInvoiceId(onPass) {
+    let checkForBlanks = this.props.invoices.filter(row => row.rowId === this.props.maxRowId)
+
+    // on max row, if invoice_id is blank, helperError is added
+    if (!checkForBlanks[0].invoiceId) return this.setState({ helperError: 'insert invoice number before adding another row' })
+    
+    // otherwise run cb if present and reset helperError
+    this.setState({helperError: ''})
+    return onPass ? onPass() : null
   }
 
   render() {
@@ -147,12 +156,16 @@ class InvoiceForm extends React.Component {
           })}
 
           <tr>
-            <th>{/* to help center the button */this.state.helperError}</th>
+            <th colSpan="4" style={{color: 'red'}}>{this.state.helperError}</th>
+          </tr>
+          <tr>
+            <th/>
             <th
               colSpan="2"
               onClick={this.addInvoice}>
                 <Button theme={'light'} >Add Invoice</Button>
             </th>
+            <th/>
           </tr>
 
           <tr>
@@ -176,9 +189,7 @@ class InvoiceForm extends React.Component {
 const mapStateToProps = ({invoice}, props) => {
   const invoices = invoice.get('invoices').toJS()
   const keys = Object.keys(invoices)
-//  console.log()
 
-  // immutableJs replaced rowId when set on state. Placing it here for easy reference
   return {
     companyName: invoice.get('companyName'),
     invoices: keys.map(keyNum => ({...invoices[keyNum], rowId: parseInt(keyNum)})),
